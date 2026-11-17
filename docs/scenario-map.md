@@ -1,8 +1,7 @@
 # 시나리오 분기 지도
 
-5개 시나리오의 선택 흐름입니다. 초록은 안전, 노랑은 아슬아슬, 빨강은 피해 결말입니다. `index.html`의 시나리오 데이터에서 자동으로 만들었습니다.
-선택 화면 11개, 결말 17개.
-
+7개 시나리오의 선택 흐름입니다. 초록은 안전, 노랑은 아슬아슬, 빨강은 피해 결말입니다. `index.html`의 시나리오 데이터에서 `node scripts/make-map.js`로 자동으로 만들었습니다.
+선택 화면 16개, 결말 25개.
 
 ## 1. 자녀를 사칭한 문자
 
@@ -135,3 +134,58 @@ flowchart TD
 1. 모르는 카드 발급 문자는 미끼입니다. 문자 속 번호로 전화하지 마세요.
 2. 카드사나 은행 확인은 카드 뒷면이나 통장에 적힌 번호로 직접 하세요.
 3. 전화로 앱을 설치하라고 하면 사기입니다.
+
+## 6. AI 가짜 의사의 건강식품 광고
+
+```mermaid
+flowchart TD
+  aidoctor_start{"의사가 직접 나와서 권해요. 어떻게 하시겠어요?"}
+  aidoctor_start -->|"의사가 하는 말이니 [지금 구매하기]를 누른다"| aidoctor_n2
+  aidoctor_start -->|"다니는 병원 의사나 약사에게 이 제품을 물어본다"| aidoctor_safe1
+  aidoctor_start -->|"자녀에게 영상을 보여 주고 같이 살펴본다"| aidoctor_safe2
+  aidoctor_n2{"할인이 오늘까지래요."}
+  aidoctor_n2 -->|"놓치기 전에 카드번호를 입력한다"| aidoctor_danger1
+  aidoctor_n2 -->|"뭔가 이상하다. 화면을 닫고 가족에게 물어본다"| aidoctor_warn1
+  aidoctor_safe1["안전: 약사에게 물어보니 '먹기만 하면 낫는' 건강식품은 없다고 했어요. 영상 속 의사는 AI로 만든 가짜였습니다."]:::safe
+  aidoctor_safe2["안전: 자녀가 함께 보더니 AI로 만든 가짜 의사라고 알려줬어요. 'AI로 만든 영상'이라는 표시도 없었어요."]:::safe
+  aidoctor_warn1["아슬아슬: 결제 전에 잘 멈추셨어요. 이미 돈을 냈다면 카드사와 1372(소비자상담센터)에 바로 알리세요."]:::warn
+  aidoctor_danger1["피해: 평범한 식품을 비싸게 산 데다, 카드 정보가 넘어가 다른 결제까지 빠져나갔어요. 먹던 약을 끊어 무릎 통증도 심해졌어요."]:::danger
+  classDef safe fill:#E2F3E9,stroke:#1A7A47
+  classDef warn fill:#FBF0DC,stroke:#9A5B00
+  classDef danger fill:#FBE5E3,stroke:#B8322A
+```
+
+**이것만 기억하세요**
+
+1. 광고 속 의사·유명인은 AI로 만든 가짜일 수 있어요. 영상에서 특정 제품을 사라고 하면 의심하세요.
+2. '먹기만 하면 낫는다', '오늘만 할인'은 과장 광고의 신호예요.
+3. 사기 전에, 그리고 먹던 약을 끊기 전에 다니는 병원 의사나 약사에게 먼저 물어보세요.
+
+## 7. 지원금 준다는 가짜 뉴스 영상
+
+```mermaid
+flowchart TD
+  fakenews_start{"뉴스라서 믿음이 가요. 어떻게 하시겠어요?"}
+  fakenews_start -->|"링크를 눌러 바로 신청한다"| fakenews_n2
+  fakenews_start -->|"친구들 단체방에 영상을 공유한다"| fakenews_n3
+  fakenews_start -->|"주민센터나 129(보건복지상담센터)에 진짜인지 물어본다"| fakenews_safe1
+  fakenews_n2{"지원금 받을 계좌를 적으래요."}
+  fakenews_n2 -->|"모두 입력하고 인증번호도 넣는다"| fakenews_danger1
+  fakenews_n2 -->|"인증번호까지 달라니 이상하다. 닫고 주민센터에 물어본다"| fakenews_warn1
+  fakenews_n3{"친구가 가짜라고 해요."}
+  fakenews_n3 -->|"그래도 혹시 모르니 링크를 눌러 본다"| fakenews_n2
+  fakenews_n3 -->|"공유한 영상을 지우고 주민센터에 확인한다"| fakenews_warn2
+  fakenews_safe1["안전: 주민센터에서는 그런 지원금이 없다고 했어요. 영상 속 아나운서는 AI로 만든 가짜였습니다."]:::safe
+  fakenews_warn1["아슬아슬: 개인정보를 넣기 전에 멈추셨어요. 이미 무언가 입력했다면 가족에게 알리고 118(한국인터넷진흥원)에 상담하세요."]:::warn
+  fakenews_warn2["아슬아슬: 가짜 뉴스를 여러 사람에게 퍼뜨릴 뻔했어요. 놀라운 소식일수록 공유하기 전에 먼저 확인해요."]:::warn
+  fakenews_danger1["피해: 주민등록번호와 인증번호로 사기범이 어르신 이름의 휴대폰을 만들고 대출을 받았어요. 지원금은 처음부터 없었습니다."]:::danger
+  classDef safe fill:#E2F3E9,stroke:#1A7A47
+  classDef warn fill:#FBF0DC,stroke:#9A5B00
+  classDef danger fill:#FBE5E3,stroke:#B8322A
+```
+
+**이것만 기억하세요**
+
+1. 정부 지원금은 영상 속 링크로 신청하지 않아요. 주민센터나 129에 먼저 물어보세요.
+2. 아나운서와 뉴스 화면도 AI로 진짜처럼 만들 수 있어요. 믿을 만한 방송사 뉴스에도 나오는지 확인하세요.
+3. 놀라운 영상일수록 공유하기 전에 멈추세요. 가족과 친구가 피해를 볼 수 있어요.
