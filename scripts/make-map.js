@@ -9,7 +9,7 @@ const m = html.match(/const SC = (\[[\s\S]*?\n  \]);/);
 if (!m) throw new Error("index.html에서 SC 배열을 찾지 못했습니다.");
 const SC = new Function("return " + m[1])();
 
-const q = s => String(s).replace(/\|/g, "").replace(/\n/g, " ").replace(/"/g, "'");
+const q = s => String(s).replace(/\{P\}/g, "엄마").replace(/\{C\}/g, "").replace(/\|/g, "").replace(/\n/g, " ").replace(/"/g, "'");
 const label = { safe: "안전", warn: "아슬아슬", danger: "피해" };
 
 // 데이터 점검: 없는 노드로 가는 선택지, 도달할 수 없는 노드

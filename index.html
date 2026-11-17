@@ -80,6 +80,38 @@ p { margin: 0; }
 .vframe .vbadge { position: absolute; top: 12px; left: 12px; font-size: 0.7rem; font-weight: 700; background: #F2C230; color: #111; border-radius: 6px; padding: 2px 8px; }
 .vframe .vplay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -60%); width: 56px; height: 56px; border-radius: 50%; background: rgba(255,255,255,0.18); display: grid; place-items: center; font-size: 1.3rem; }
 .vframe .vcap { font-family: var(--font-display); font-size: 1.25rem; line-height: 1.3; text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
+/* 수상한 점 찾기: 영상 화면 위에 누를 수 있는 영역(.hot)을 겹쳐 둠 */
+.vstage { position: relative; aspect-ratio: 16 / 10; background: #0B1219; overflow: hidden; }
+.vstage svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.hot { font: inherit; color: inherit; background: none; border: 3px dashed transparent; border-radius: 10px; cursor: pointer; padding: 6px 8px; text-align: left; position: relative; }
+.hot.abs { position: absolute; padding: 0; }
+.hot:hover { border-color: var(--line); }
+.hot.found { border-color: var(--danger); border-style: solid; background: rgba(184, 50, 42, 0.14); }
+.hot.found::after { content: attr(data-n); position: absolute; top: -12px; left: -12px; width: 26px; height: 26px; border-radius: 50%; background: var(--danger); color: #fff; font: 700 0.8rem/26px var(--font-body); text-align: center; }
+.hot.reveal { border-color: var(--warn); border-style: solid; }
+/* 번호 배지는 상자 안쪽 왼쪽에: 화면 가장자리에서 잘리지 않고 글자도 가리지 않게 */
+.hot.found::after, .hot.reveal::after { top: 50% !important; left: 4px !important; transform: translateY(-50%); }
+.hot.found:not(:empty), .hot.reveal:not(:empty) { padding-left: 36px; }
+.hot.found:empty::after, .hot.reveal:empty::after { top: -12px !important; left: -12px !important; transform: none; } /* 그림 위 영역은 단서를 가리지 않게 바깥에 */
+.hot.reveal::after { content: attr(data-n); position: absolute; top: -12px; left: -12px; width: 26px; height: 26px; border-radius: 50%; background: var(--warn); color: #fff; font: 700 0.8rem/26px var(--font-body); text-align: center; }
+.vcap-hot { position: absolute; left: 8px; right: 8px; bottom: 8px; color: #fff; font-family: var(--font-display); font-size: 1.05rem; line-height: 1.3; background: rgba(0, 0, 0, 0.55); }
+.vtimer { position: absolute; top: 8px; right: 8px; color: #111; background: #F2C230; font-weight: 700; font-size: 0.75rem; padding: 2px 8px; }
+.vlogo { position: absolute; top: 8px; left: 8px; color: #fff; background: #C8102E; font-weight: 700; font-size: 0.75rem; padding: 2px 8px; }
+.vmeta { padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; border-top: 2px solid var(--line); }
+.vmeta .hot { width: 100%; }
+.cmt { font-size: 0.85rem; display: flex; flex-direction: column; gap: 4px; }
+.cmt span { color: var(--muted); font-size: 0.75rem; }
+.score { display: flex; align-items: center; justify-content: space-between; font-weight: 700; }
+.score b { font-family: var(--font-display); font-weight: 400; font-size: 1.6rem; color: var(--danger); }
+.found-list { margin: 0; padding-left: 1.4em; display: flex; flex-direction: column; gap: 8px; }
+.found-list li.miss { color: var(--warn); }
+.tip { font-size: 0.9rem; color: var(--muted); min-height: 1.4em; }
+.fam-banner { background: var(--safe-bg); border: 2px solid var(--safe); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.linkbox { font-size: 0.8rem; word-break: break-all; background: var(--bg); border: 2px solid var(--line); border-radius: 10px; padding: 10px; }
+@media (prefers-reduced-motion: no-preference) {
+  .hot.no { animation: shake .3s; }
+  @keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+}
 .bub.say::before { content: "영상 속 말: "; font-size: 0.75rem; font-weight: 700; color: var(--muted); display: block; }
 .ask { font-weight: 700; font-size: 1.1rem; }
 .speak { font: inherit; font-size: 0.85rem; font-weight: 700; color: var(--accent); background: none; border: 2px solid var(--accent); border-radius: 999px; padding: 6px 14px; align-self: flex-start; cursor: pointer; }
@@ -130,9 +162,23 @@ th { color: var(--muted); font-weight: 700; }
   const KEY = "mumchum-v1";
   function load() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
   function save(d) { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) {} }
-  let store = Object.assign({ played: {}, tests: [], plays: [], pw: "", big: false }, load());
+  let store = Object.assign({ played: {}, tests: [], plays: [], spots: [], pw: "", big: false, fam: null }, load());
   function persist() { save(store); }
   if (store.big) document.documentElement.classList.add("big");
+
+  /* ---------- 가족 맞춤 연습 ----------
+     자녀가 만든 링크 끝(#fam=...)에 호칭과 이름이 들어 있음. 서버로 보내지 않고 이 휴대폰에만 저장.
+     시나리오 글의 {P}는 부모님 호칭(엄마·아빠…), {C}는 자녀 이름으로 바뀜 */
+  try {
+    const m = location.hash.match(/^#fam=(.+)$/);
+    if (m) {
+      const f = JSON.parse(decodeURIComponent(m[1]));
+      store.fam = { p: String(f.p || "엄마").slice(0, 10), c: String(f.c || "").slice(0, 10) };
+      persist();
+      history.replaceState(null, "", location.pathname + location.search); // 주소창에서 이름 지우기
+    }
+  } catch (e) {}
+  const tpl = t => String(t).replace(/\{P\}/g, (store.fam && store.fam.p) || "엄마").replace(/\{C\}/g, store.fam && store.fam.c ? ", " + store.fam.c : "");
 
   /* ---------- 시나리오 데이터 ---------- */
   const SC = [
@@ -140,13 +186,13 @@ th { color: var(--muted); font-weight: 700; }
       id: "child", tag: "메신저", title: "자녀를 사칭한 문자",
       who: "모르는 번호", sub: "010-5821-●●●● · 문자", kind: "chat",
       nodes: {
-        start: { msgs: [["them", "엄마 나야. 폰 액정이 깨져서 수리 맡겼어 ㅠㅠ"], ["them", "이 번호는 임시폰이야. 급하게 부탁할 게 있는데 문자로 해줄 수 있어?"]],
+        start: { msgs: [["them", "{P} 나야{C}. 폰 액정이 깨져서 수리 맡겼어 ㅠㅠ"], ["them", "이 번호는 임시폰이야. 급하게 부탁할 게 있는데 문자로 해줄 수 있어?"]],
           ask: "어떻게 하시겠어요?",
           choices: [["그래, 무슨 일이야? 하고 답장한다", "n2"], ["평소 쓰던 번호로 아이에게 직접 전화해 본다", "safe1"], ["누군지 모르니 답장하지 않는다", "safe2"]] },
-        n2: { msgs: [["me", "그래, 무슨 일이야?"], ["them", "온라인으로 결제할 게 있는데 내 폰이 안 돼서. 엄마 신분증 사진이랑 카드 번호 좀 보내줘"], ["them", "급해서 그래 빨리~"]],
+        n2: { msgs: [["me", "그래, 무슨 일이야?"], ["them", "온라인으로 결제할 게 있는데 내 폰이 안 돼서. {P} 신분증 사진이랑 카드 번호 좀 보내줘"], ["them", "급해서 그래 빨리~"]],
           ask: "아이가 급하다고 해요. 어떻게 하시겠어요?",
           choices: [["신분증 사진과 카드 번호를 보낸다", "danger1"], ["가족 암호를 물어본다", "n3"], ["\"네 원래 번호로 전화할게\" 하고 대화를 멈춘다", "safe1"]] },
-        n3: { msgs: [["me", "우리 집 암호가 뭐였지?"], ["them", "엄마 지금 그런 거 물어볼 때야? 급하다니까!!"], ["them", "나중에 다 설명할게. 일단 보내줘"]],
+        n3: { msgs: [["me", "우리 집 암호가 뭐였지?"], ["them", "{P} 지금 그런 거 물어볼 때야? 급하다니까!!"], ["them", "나중에 다 설명할게. 일단 보내줘"]],
           ask: "암호를 대답하지 못해요.",
           choices: [["이상하다. 원래 번호로 아이에게 전화한다", "safe1"], ["애가 급하다니 그냥 보내준다", "danger1"]] },
         safe1: { end: "safe", text: "원래 번호로 전화해 보니 아이는 회사에서 일하는 중이었어요. 문자는 사기였습니다." },
@@ -262,6 +308,102 @@ th { color: var(--muted); font-weight: 700; }
     }
   ];
 
+  /* ---------- 수상한 점 찾기 (AI 영상 시나리오 뒤에 이어짐) ----------
+     stage: 영상 화면 그림(SVG) 위에 누를 수 있는 버튼을 겹친 HTML
+       data-clue="키"  → 진짜 단서 (clues[키]에 이름과 이유)
+       data-decoy="키" → 단서처럼 보이지만 아닌 곳 (decoys[키]에 안내)
+     위치(left/top/width/height)는 영상 화면 크기에 대한 % 라서 화면 크기가 바뀌어도 맞음 */
+  const SPOT = {
+    aidoctor: {
+      intro: "방금 본 광고에는 가짜를 알아챌 수 있는 단서가 6개 숨어 있어요. 수상한 곳을 손가락으로 눌러 보세요.",
+      stage: `
+        <div class="vstage">
+          <svg viewBox="0 0 320 200" aria-hidden="true">
+            <rect width="320" height="200" fill="#22323F"/>
+            <rect x="18" y="22" width="70" height="96" rx="4" fill="#2C4254"/>
+            <rect x="26" y="34" width="54" height="6" fill="#3E5A70"/><rect x="26" y="58" width="54" height="6" fill="#3E5A70"/><rect x="26" y="82" width="54" height="6" fill="#3E5A70"/>
+            <path d="M282 30h10v12h12v10h-12v12h-10V52h-12V42h12z" fill="#3FA66B"/>
+            <path d="M70 200 Q76 140 150 126 Q224 140 230 200 Z" fill="#F4F6F8"/>
+            <path d="M134 128 L150 162 L166 128 Z" fill="#9EC3E6"/>
+            <rect x="140" y="108" width="20" height="22" fill="#E8B993"/>
+            <circle cx="150" cy="86" r="32" fill="#F1C7A3"/>
+            <path d="M118 82 Q120 50 150 50 Q182 50 182 82 Q172 64 150 64 Q128 64 118 82 Z" fill="#3A3A3A"/>
+            <circle cx="138" cy="88" r="8" fill="none" stroke="#333" stroke-width="2"/><circle cx="162" cy="88" r="8" fill="none" stroke="#333" stroke-width="2"/><path d="M146 88h8" stroke="#333" stroke-width="2"/>
+            <path d="M139 104 Q150 112 161 104" fill="none" stroke="#8A4B3A" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M128 132 Q118 166 140 176" fill="none" stroke="#555" stroke-width="3"/><circle cx="142" cy="176" r="5" fill="#777"/>
+            <rect x="96" y="148" width="58" height="20" rx="3" fill="#fff" stroke="#14558F" stroke-width="2"/>
+            <text x="125" y="162" font-size="11" text-anchor="middle" fill="#14558F" font-weight="700">전문의</text>
+            <path d="M214 150 Q206 136 214 122" fill="none" stroke="#F4F6F8" stroke-width="18" stroke-linecap="round"/>
+            <rect x="228" y="92" width="36" height="62" rx="7" fill="#6B3E1E"/><rect x="234" y="82" width="24" height="12" rx="2" fill="#DDD"/>
+            <rect x="230" y="108" width="32" height="24" fill="#F2C230"/><text x="246" y="124" font-size="9" text-anchor="middle" fill="#111" font-weight="700">관절쏙</text>
+            <ellipse cx="216" cy="122" rx="12" ry="20" fill="#F1C7A3"/>
+            <g fill="#F1C7A3" stroke="#C9967A" stroke-width="1"><ellipse cx="232" cy="100" rx="11" ry="4"/><ellipse cx="233" cy="109" rx="11" ry="4"/><ellipse cx="234" cy="118" rx="11" ry="4"/><ellipse cx="234" cy="127" rx="11" ry="4"/><ellipse cx="233" cy="136" rx="11" ry="4"/><ellipse cx="231" cy="145" rx="10" ry="4"/></g>
+          </svg>
+          <button class="hot abs" data-clue="hand" aria-label="제품을 든 손" style="left:63%;top:44%;width:18%;height:34%"></button>
+          <button class="hot abs" data-clue="tag" aria-label="가슴의 이름표" style="left:28%;top:71%;width:22%;height:16%"></button>
+          <button class="hot abs" data-decoy="face" aria-label="의사의 얼굴" style="left:35%;top:24%;width:24%;height:36%"></button>
+          <button class="hot abs vtimer" data-clue="timer">오늘만 70% · 마감 03:12</button>
+        </div>
+        <button class="hot" data-clue="cap" style="display:block;width:100%;background:#0B1219;color:#fff;font-family:var(--font-display);font-size:1.1rem;border-radius:0">먹기만 하면 2주 만에 무릎 통증 끝!</button>
+        <div class="vmeta">
+          <button class="hot" data-decoy="views"><b>닥터건강TV</b> · 광고 · 조회수 128만회</button>
+          <button class="hot" data-clue="url">지금 구매하기 ▶ <span class="url" style="color:var(--accent);text-decoration:underline">knee-shop.kr-xn.top</span></button>
+          <button class="hot cmt" data-clue="cmt"><span>댓글 3,214개</span>저도 효과 봤어요!! 계단 뛰어다녀요<br>우리 엄마도 효과 봤어요!! 최고예요<br>진짜 효과 있어요!! 강력 추천</button>
+        </div>`,
+      clues: {
+        hand: ["손가락이 6개", "AI가 만든 영상은 손가락·귀·글자처럼 작은 부분이 어색할 때가 많아요. 요즘은 점점 자연스러워져서 이것만 믿으면 안 돼요."],
+        tag: ["이름도 병원도 없는 '전문의'", "누구인지 확인할 수 없는 의사예요. 이름과 병원을 알 수 없으면 진짜 의사인지 믿기 어려워요."],
+        timer: ["'오늘만', '마감' 압박", "생각할 시간을 뺏어서 바로 사게 만들려는 말이에요."],
+        cap: ["먹기만 하면 낫는다는 말", "식품을 먹기만 하면 병이 낫는다고 하는 건 과장 광고예요."],
+        url: ["이상한 구매 주소", "처음 보는 주소에 이름과 카드번호를 넣으면 안 돼요."],
+        cmt: ["똑같은 말투의 칭찬 댓글", "느낌표까지 비슷한 칭찬이 줄줄이 달려 있어요. 가짜 계정이 단 댓글일 수 있어요."]
+      },
+      decoys: {
+        face: "얼굴만 보고는 알기 어려워요. AI는 사람 얼굴을 진짜처럼 만들 수 있거든요. 다른 곳을 찾아보세요.",
+        views: "조회수가 많다고 믿을 수 있는 건 아니지만, 이것만으로 가짜인지 알 수는 없어요."
+      }
+    },
+    fakenews: {
+      intro: "방금 본 뉴스 영상에는 가짜를 알아챌 수 있는 단서가 5개 숨어 있어요. 수상한 곳을 손가락으로 눌러 보세요.",
+      stage: `
+        <div class="vstage">
+          <svg viewBox="0 0 320 200" aria-hidden="true">
+            <rect width="320" height="200" fill="#12325A"/>
+            <g fill="#1C4677"><rect x="0" y="90" width="30" height="70"/><rect x="34" y="70" width="24" height="90"/><rect x="62" y="96" width="30" height="64"/><rect x="232" y="76" width="26" height="84"/><rect x="262" y="100" width="24" height="60"/><rect x="290" y="66" width="30" height="94"/></g>
+            <path d="M88 200 Q94 136 160 124 Q226 136 232 200 Z" fill="#2B2F3A"/>
+            <path d="M144 126 L160 160 L176 126 Z" fill="#F4F6F8"/>
+            <path d="M156 132 L164 132 L167 170 L160 178 L153 170 Z" fill="#C8102E"/>
+            <rect x="150" y="106" width="20" height="22" fill="#E8B993"/>
+            <circle cx="160" cy="84" r="30" fill="#F1C7A3"/>
+            <path d="M130 84 Q128 50 160 50 Q192 50 190 84 Q186 62 160 60 Q136 62 130 84 Z" fill="#2A2420"/>
+            <circle cx="149" cy="84" r="3" fill="#333"/><circle cx="171" cy="84" r="3" fill="#333"/>
+            <path d="M150 100 Q160 106 170 100" fill="none" stroke="#8A4B3A" stroke-width="2.5" stroke-linecap="round"/>
+            <rect x="0" y="168" width="320" height="32" fill="#0E1E33"/>
+          </svg>
+          <button class="hot abs vlogo" data-clue="logo">속보뉴스24</button>
+          <button class="hot abs vtimer" data-clue="timer">신청 마감: 이번 주 금요일</button>
+          <button class="hot abs" data-decoy="anchor" aria-label="아나운서" style="left:30%;top:22%;width:40%;height:62%"></button>
+        </div>
+        <button class="hot" data-clue="cap" style="display:block;width:100%;background:#C8102E;color:#fff;font-family:var(--font-display);font-size:1.1rem;border-radius:0">[속보] 65세 이상 50만 원 · 영상 아래 링크에서만 신청</button>
+        <div class="vmeta">
+          <button class="hot" data-decoy="views">조회수 54만회 · 3시간 전</button>
+          <button class="hot" data-clue="url">신청하기 ▶ <span class="url" style="color:var(--accent);text-decoration:underline">gov-support.kr-apply.top</span></button>
+          <button class="hot cmt" data-clue="cmt"><span>댓글 892개</span>신청했더니 바로 입금됐어요!!<br>저도 어제 받았어요!! 빨리 하세요<br>마감 전에 꼭 신청하세요!!</button>
+        </div>`,
+      clues: {
+        logo: ["처음 보는 방송사 이름", "'속보뉴스24'는 알려진 방송사가 아니에요. 큰 소식이라면 믿을 만한 방송사 뉴스에도 나와요."],
+        cap: ["'링크에서만 신청'", "정부 지원금은 영상 속 링크로만 받지 않아요. 주민센터나 129에서 확인할 수 있어요."],
+        timer: ["'이번 주 금요일 마감' 압박", "서두르게 만들어서 확인할 시간을 뺏으려는 말이에요."],
+        url: ["정부 주소가 아님", "정부 누리집 주소는 'go.kr'로 끝나요. 이 주소는 정부가 아니에요."],
+        cmt: ["'입금됐어요' 가짜 후기", "비슷한 말투로 신청을 재촉하는 댓글은 가짜 계정이 단 것일 수 있어요."]
+      },
+      decoys: {
+        anchor: "아나운서 모습만으로는 알 수 없어요. AI는 사람 모습과 목소리를 진짜처럼 만들 수 있거든요. 다른 곳을 찾아보세요.",
+        views: "조회수가 많다고 믿을 수 있는 건 아니지만, 이것만으로 가짜인지 알 수는 없어요."
+      }
+    }
+  };
+
   /* ---------- 사전·사후 문제 (같은 문제를 전후에 사용) ---------- */
   const QUIZ = [
     { q: "모르는 번호로 \"엄마, 폰이 고장 나서 임시폰이야. 신분증 사진 좀 보내줘\" 하는 문자가 왔어요.",
@@ -273,7 +415,9 @@ th { color: var(--muted); font-weight: 700; }
     { q: "검찰 수사관이라며 \"통장 돈을 안전계좌로 옮기라\"는 전화가 왔어요.",
       o: ["수사에 협조하려고 돈을 옮긴다", "가족에게 말하지 말라니 혼자 처리한다", "전화를 끊고 112나 가족에게 알린다"], a: 2 },
     { q: "신청한 적 없는 카드가 발급됐다며 고객센터 번호가 적힌 문자가 왔어요.",
-      o: ["카드 뒷면에 적힌 번호로 직접 전화한다", "문자 속 고객센터 번호로 전화한다", "문자 속 링크를 눌러 취소한다"], a: 0 }
+      o: ["카드 뒷면에 적힌 번호로 직접 전화한다", "문자 속 고객센터 번호로 전화한다", "문자 속 링크를 눌러 취소한다"], a: 0 },
+    { q: "유튜브에서 의사가 나와 \"이 건강식품만 먹으면 무릎이 낫는다, 오늘만 할인\"이라고 하는 영상을 봤어요.",
+      o: ["의사가 직접 권하니 믿고 산다", "효과 봤다는 댓글이 많은지 확인하고 산다", "사기 전에 다니는 병원 의사나 약사에게 물어본다"], a: 2 }
   ];
 
   /* ---------- 도우미 ---------- */
@@ -305,11 +449,15 @@ th { color: var(--muted); font-weight: 700; }
   function home() {
     const doneCount = SC.filter(s => store.played[s.id]).length;
     render(`
-      <h1>이상한 문자·전화·영상,<br>미리 겪어 보고 막아요</h1>
+      <h1>이상한 <span style="white-space:nowrap">문자·전화·영상,</span><br>미리 겪어 보고 막아요</h1>
       <p class="lead">진짜 같은 사기 상황이 나와요. 버튼을 눌러 어떻게 할지 고르면, 무엇이 안전한지 알려 드려요.</p>
       <div class="rule" aria-label="기억할 세 가지">
         <div><b>멈춤</b>바로 하지 않기</div><div><b>끊기</b>전화·문자 끊기</div><div><b>확인</b>원래 번호로 전화</div>
       </div>
+      ${store.fam ? `<div class="fam-banner">
+        <p><b>${esc(store.fam.c || "가족")}님이 보낸 맞춤 연습이 있어요</b><br>자녀를 사칭한 사기 문자가 우리 가족 이름으로 나와요.</p>
+        <button class="btn primary" data-play="child">맞춤 연습 하기</button>
+        <button class="link" id="famoff" style="align-self:flex-start">맞춤 연습 끄기</button></div>` : ""}
       <button class="btn primary" data-go="list">연습 시작하기</button>
       <button class="btn" data-go="family"><span class="grow">우리 가족 암호 정하기</span><span class="tag">${store.pw ? "정함" : "아직"}</span></button>
       <p class="trail">연습한 상황 ${doneCount} / ${SC.length}</p>
@@ -339,7 +487,7 @@ th { color: var(--muted); font-weight: 700; }
     const s = cur.s, n = s.nodes[nodeId];
     if (n.end) return ending(n);
     const video = s.kind === "video";
-    const msgs = n.msgs.map(([w, t]) => `<div class="bub ${w === "me" ? "me" : w === "note" ? "note" : video ? "say" : ""}">${fmt(t)}</div>`).join("");
+    const msgs = n.msgs.map(([w, t]) => `<div class="bub ${w === "me" ? "me" : w === "note" ? "note" : video ? "say" : ""}">${fmt(tpl(t))}</div>`).join("");
     const icon = { call: "☎", chat: "✉", video: "▶" }[s.kind];
     const head = `<div class="phone-head"><div class="avatar" aria-hidden="true">${icon}</div><div class="who">${esc(s.who)}<div class="sub">${esc(s.sub)}</div></div></div>`;
     const top = s.kind === "call" && nodeId === "start"
@@ -347,7 +495,7 @@ th { color: var(--muted); font-weight: 700; }
       : video && nodeId === "start"
         ? `<div class="vframe" role="img" aria-label="영상 화면: ${esc(plain(s.screen))}"><span class="vbadge">${esc(s.badge)}</span><span class="vplay" aria-hidden="true">▶</span><span class="vcap">${fmt(s.screen)}</span></div>${head}`
         : head;
-    const readText = (video && nodeId === "start" ? plain(s.screen) + ". " : "") + n.msgs.map(m => plain(m[1])).join(" ") + " " + n.ask + " " + n.choices.map((c, i) => (i + 1) + "번, " + c[0]).join(". ");
+    const readText = (video && nodeId === "start" ? plain(s.screen) + ". " : "") + n.msgs.map(m => plain(tpl(m[1]))).join(" ") + " " + n.ask + " " + n.choices.map((c, i) => (i + 1) + "번, " + c[0]).join(". ");
     render(`
       <p class="trail">${esc(s.title)}</p>
       <div class="phone">${top}<div class="chat">${msgs}</div></div>
@@ -362,15 +510,76 @@ th { color: var(--muted); font-weight: 700; }
     store.played[s.id] = n.end;
     store.plays.push({ t: new Date().toISOString(), id: s.id, end: n.end, path: cur.path.join(" > ") });
     persist();
-    const idx = SC.indexOf(s), next = SC[idx + 1];
     render(`
       <div class="verdict ${n.end}"><span class="stamp">${endLabel[n.end]}</span><p>${esc(n.text)}</p></div>
       <div class="lesson"><h2>이것만 기억하세요</h2><ol>${s.lesson.map(l => `<li>${esc(l)}</li>`).join("")}</ol>
         <button class="speak" id="read">소리로 듣기</button></div>
-      ${next ? `<button class="btn primary" data-play="${next.id}">다음 상황: ${esc(next.title)}</button>` : `<button class="btn primary" data-go="family">마지막으로, 가족 암호 정하기</button>`}
+      ${SPOT[s.id] ? `<button class="btn primary" data-spot="${s.id}">영상 다시 보며 수상한 점 찾기</button>` : nextButton(s)}
       <div class="row"><button class="btn" data-play="${s.id}">다시 해 보기</button><button class="btn" data-go="list">목록으로</button></div>
     `);
-    document.getElementById("read").onclick = () => speak(endLabel[n.end] + ". " + n.text + " 이것만 기억하세요. " + s.lesson.join(" "));
+    document.getElementById("read").onclick = () => speak(endLabel[n.end] + ". " + n.text + " 이것만 기억하세요. " + tpl(s.lesson.join(" ")));
+  }
+  // 다음 시나리오로 가는 버튼 (마지막이면 가족 암호로)
+  function nextButton(s) {
+    const next = SC[SC.indexOf(s) + 1];
+    return next ? `<button class="btn primary" data-play="${next.id}">다음 상황: ${esc(next.title)}</button>`
+      : `<button class="btn primary" data-go="family">마지막으로, 가족 암호 정하기</button>`;
+  }
+
+  /* ---------- 화면: 수상한 점 찾기 ---------- */
+  let sp = null; // { s, d, found:[키...], t0, done }
+  function spotPlay(id) {
+    const s = SC.find(x => x.id === id), d = SPOT[id], total = Object.keys(d.clues).length;
+    sp = { s, d, found: [], t0: Date.now(), done: false };
+    render(`
+      <p class="trail">${esc(s.title)} · 수상한 점 찾기</p>
+      <h2>수상한 점을 찾아보세요</h2>
+      <p class="lead">${esc(d.intro)}</p>
+      <div class="phone" id="stage">${d.stage}</div>
+      <p class="tip" id="tip" aria-live="polite"></p>
+      <div class="card"><div class="score"><span>찾은 단서</span><b id="cnt">0 / ${total}</b></div><ol class="found-list" id="flist"></ol></div>
+      <button class="btn" id="giveup">더 못 찾겠어요. 정답 보기</button>
+      <div id="after" class="stack"></div>
+    `);
+  }
+  function spotTap(b) {
+    if (!sp || sp.done) return;
+    const d = sp.d, tip = document.getElementById("tip");
+    if (b.dataset.decoy) {
+      tip.textContent = d.decoys[b.dataset.decoy];
+      b.classList.remove("no"); void b.offsetWidth; b.classList.add("no"); // 흔들림 애니메이션 다시 재생
+      return;
+    }
+    const k = b.dataset.clue;
+    if (sp.found.includes(k)) return;
+    sp.found.push(k);
+    b.classList.add("found"); b.dataset.n = sp.found.length;
+    const [name, why] = d.clues[k];
+    document.getElementById("flist").insertAdjacentHTML("beforeend", `<li><b>${esc(name)}</b>: ${esc(why)}</li>`);
+    document.getElementById("cnt").textContent = sp.found.length + " / " + Object.keys(d.clues).length;
+    tip.textContent = "찾았어요! " + name;
+    speak(name + ". " + why);
+    if (sp.found.length === Object.keys(d.clues).length) spotFinish(false);
+  }
+  function spotFinish(gaveUp) {
+    sp.done = true;
+    const d = sp.d, keys = Object.keys(d.clues), total = keys.length, got = sp.found.length;
+    let n = got;
+    keys.filter(k => !sp.found.includes(k)).forEach(k => {
+      const b = document.querySelector(`#stage [data-clue="${k}"]`);
+      b.classList.add("reveal"); b.dataset.n = ++n;
+      const [name, why] = d.clues[k];
+      document.getElementById("flist").insertAdjacentHTML("beforeend", `<li class="miss"><b>놓친 단서 · ${esc(name)}</b>: ${esc(why)}</li>`);
+    });
+    store.spots.push({ t: new Date().toISOString(), id: sp.s.id, found: got, total, sec: Math.round((Date.now() - sp.t0) / 1000), gaveUp });
+    persist();
+    document.getElementById("giveup").remove();
+    document.getElementById("tip").textContent = "";
+    document.getElementById("after").innerHTML = `
+      <div class="verdict ${got === total ? "safe" : "warn"}"><span class="stamp">${got === total ? "모두 찾았어요!" : `${total}개 중 ${got}개를 찾았어요`}</span>
+        <p>${got === total ? "이제 비슷한 영상을 보면 이 단서들을 먼저 살펴보세요." : "놓친 곳은 노란색으로 표시했어요. 위 목록에서 이유를 읽어 보세요."} 단서를 하나라도 찾았다면, 사거나 신청하기 전에 꼭 가족이나 약사·주민센터에 먼저 물어보세요.</p></div>
+      ${nextButton(sp.s)}`;
+    document.getElementById("after").scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 
   /* ---------- 화면: 가족 암호 ---------- */
@@ -398,8 +607,34 @@ th { color: var(--muted); font-weight: 700; }
           <li>그래도 이상하면 112(경찰)나 1332(금융감독원)에 물어봐요.</li>
         </ol>
       </div>
+      <div class="card">
+        <p><b>자녀분께: 부모님께 맞춤 연습 보내기</b></p>
+        <p class="lead" style="font-size:0.9rem">진짜 사기범도 가족 이름을 알고 연락해요. 아래를 채워 링크를 보내면, 부모님 휴대폰의 '자녀 사칭 문자'가 우리 가족 이름으로 나와요. 이름은 서버로 보내지 않아요.</p>
+        <label for="famp">부모님을 부르는 말</label>
+        <input type="text" id="famp" maxlength="10" placeholder="예: 엄마, 아빠, 어머니" value="${esc((store.fam && store.fam.p) || "엄마")}">
+        <label for="famc">자녀 이름이나 호칭</label>
+        <input type="text" id="famc" maxlength="10" placeholder="예: 민수, 막내" value="${esc((store.fam && store.fam.c) || "")}">
+        <button class="btn primary" id="famlink">맞춤 연습 링크 만들기</button>
+        <div id="famout" class="stack"></div>
+      </div>
       <button class="link" data-go="home">처음으로</button>
     `);
+    document.getElementById("famlink").onclick = () => {
+      const p = document.getElementById("famp").value.trim() || "엄마", c = document.getElementById("famc").value.trim();
+      const url = location.origin + location.pathname + "#fam=" + encodeURIComponent(JSON.stringify({ p, c }));
+      const text = `${p}, 사기 문자 대처를 미리 연습해 보세요. 눌러서 열면 바로 시작돼요.`;
+      document.getElementById("famout").innerHTML = `<div class="linkbox">${esc(url)}</div>
+        <div class="row"><button class="btn" id="famsend">${navigator.share ? "카톡 등으로 보내기" : "링크 복사"}</button><button class="btn" id="famtry">이 휴대폰에서 미리 보기</button></div>
+        <p class="msg" id="fammsg"></p>`;
+      document.getElementById("famsend").onclick = () => {
+        if (navigator.share) navigator.share({ title: "멈춤 연습장", text, url }).catch(() => {});
+        else {
+          const fail = () => { document.getElementById("fammsg").textContent = "위 주소를 길게 눌러 복사해 주세요."; };
+          try { navigator.clipboard.writeText(text + "\n" + url).then(() => { document.getElementById("fammsg").textContent = "복사됐어요. 부모님께 붙여 넣어 보내세요."; }, fail); } catch (e) { fail(); }
+        }
+      };
+      document.getElementById("famtry").onclick = () => { store.fam = { p, c }; persist(); play("child"); };
+    };
     const show = () => {
       document.getElementById("pwcard").innerHTML = store.pw ? `<div class="pw-card"><span class="small">돈 이야기가 나오면 먼저 물어보기</span><span class="q">${esc(store.pw)}</span><span class="small">이 화면을 가족과 함께 보며 답을 정해 두세요. 답은 적지 마세요.</span></div>` : "";
     };
@@ -413,7 +648,7 @@ th { color: var(--muted); font-weight: 700; }
     let phase = "사전";
     render(`
       <h2>사전·사후 문제</h2>
-      <p class="lead">연습 전에 한 번, 연습 후에 한 번 같은 문제 5개를 풀어요. 정답은 알려 드리지 않아요.</p>
+      <p class="lead">연습 전에 한 번, 연습 후에 한 번 같은 문제 ${QUIZ.length}개를 풀어요. 정답은 알려 드리지 않아요.</p>
       <div class="card">
         <label for="pid">참여자 이름 또는 번호</label>
         <input type="text" id="pid" maxlength="20" placeholder="예: 참여자1">
@@ -449,7 +684,7 @@ th { color: var(--muted); font-weight: 700; }
   }
   function testDone() {
     const score = test.ans.reduce((n, a, i) => n + (a === QUIZ[i].a ? 1 : 0), 0);
-    store.tests.push({ t: new Date().toISOString(), pid: test.pid, phase: test.phase, score, ans: test.ans.map(a => a + 1).join(""), sec: Math.round((Date.now() - test.t0) / 1000) });
+    store.tests.push({ t: new Date().toISOString(), pid: test.pid, phase: test.phase, score, n: QUIZ.length, ans: test.ans.map(a => a + 1).join(""), sec: Math.round((Date.now() - test.t0) / 1000) });
     persist();
     render(`
       <div class="verdict safe"><span class="stamp">수고하셨어요!</span><p>${esc(test.pid)}님의 ${test.phase} 문제가 저장됐어요.</p></div>
@@ -467,12 +702,16 @@ th { color: var(--muted); font-weight: 700; }
     const rows = Object.keys(people).map(p => {
       const a = people[p]["사전"], b = people[p]["사후"];
       const d = a && b ? b.score - a.score : null;
-      return `<tr><td>${esc(p)}</td><td>${a ? a.score + "/" + QUIZ.length : "-"}</td><td>${b ? b.score + "/" + QUIZ.length : "-"}</td><td>${d === null ? "-" : (d > 0 ? "+" : "") + d}</td></tr>`;
+      return `<tr><td>${esc(p)}</td><td>${a ? a.score + "/" + (a.n || 5) : "-"}</td><td>${b ? b.score + "/" + (b.n || 5) : "-"}</td><td>${d === null ? "-" : (d > 0 ? "+" : "") + d}</td></tr>`;
     }).join("");
     const pre = store.tests.filter(r => r.phase === "사전"), post = store.tests.filter(r => r.phase === "사후");
-    const avg = arr => arr.length ? (arr.reduce((n, r) => n + r.score, 0) / arr.length / QUIZ.length * 100).toFixed(0) + "%" : "-";
+    const avg = arr => arr.length ? (arr.reduce((n, r) => n + r.score / (r.n || 5), 0) / arr.length * 100).toFixed(0) + "%" : "-"; // 예전 기록(5문항)도 맞게 계산
     const ends = { safe: 0, warn: 0, danger: 0 };
     store.plays.forEach(p => ends[p.end]++);
+    const spotLine = Object.keys(SPOT).map(id => {
+      const rs = store.spots.filter(r => r.id === id);
+      return `${esc(SC.find(s => s.id === id).title)}: ${rs.length ? "평균 " + (rs.reduce((n, r) => n + r.found, 0) / rs.length).toFixed(1) + " / " + rs[0].total + "개 (" + rs.length + "회)" : "-"}`;
+    }).join("<br>");
     render(`
       <h2>저장된 기록</h2>
       <p class="lead">이 기록은 이 휴대폰(브라우저) 안에만 저장돼요. 테스트가 끝나면 아래 '기록 복사'로 옮겨 두세요.</p>
@@ -481,6 +720,7 @@ th { color: var(--muted); font-weight: 700; }
         <div class="table-box"><table><thead><tr><th>참여자</th><th>사전</th><th>사후</th><th>변화</th></tr></thead>
         <tbody>${rows || '<tr><td colspan="4">아직 기록이 없어요. 사전 문제를 먼저 풀어 주세요.</td></tr>'}</tbody></table></div>
         <p><b>연습 결과</b> 안전 ${ends.safe}회 · 아슬아슬 ${ends.warn}회 · 피해 ${ends.danger}회 (총 ${store.plays.length}회)</p>
+        <p><b>수상한 점 찾기</b><br>${spotLine}</p>
       </div>
       <div class="row"><button class="btn" id="copy">기록 복사 (CSV)</button><button class="btn" id="wipe">기록 모두 지우기</button></div>
       <p class="msg" id="msg"></p>
@@ -491,6 +731,7 @@ th { color: var(--muted); font-weight: 700; }
     document.getElementById("copy").onclick = () => {
       const lines = ["구분,시각,참여자,단계,점수,응답,소요초,시나리오,결과,선택경로"];
       store.tests.forEach(r => lines.push(["문제", r.t, r.pid, r.phase, r.score, "'" + r.ans, r.sec, "", "", ""].join(",")));
+      store.spots.forEach(r => lines.push(["단서찾기", r.t, "", "", r.found, r.gaveUp ? "정답보기" : "", r.sec, r.id, r.found + "/" + r.total, ""].join(",")));
       store.plays.forEach(p => lines.push(["연습", p.t, "", "", "", "", "", p.id, p.end, '"' + p.path.replace(/"/g, "'") + '"'].join(",")));
       const csv = lines.join("\n");
       const box = document.getElementById("csvbox");
@@ -501,7 +742,7 @@ th { color: var(--muted); font-weight: 700; }
     };
     document.getElementById("wipe").onclick = () => {
       document.getElementById("confirm").innerHTML = `<div class="confirm"><p>정말 모든 기록을 지울까요? 되돌릴 수 없어요.</p><div class="row"><button class="btn" id="yes">지우기</button><button class="btn" id="no">취소</button></div></div>`;
-      document.getElementById("yes").onclick = () => { store.tests = []; store.plays = []; store.played = {}; persist(); records(); };
+      document.getElementById("yes").onclick = () => { store.tests = []; store.plays = []; store.spots = []; store.played = {}; persist(); records(); };
       document.getElementById("no").onclick = () => { document.getElementById("confirm").innerHTML = ""; };
     };
   }
@@ -511,12 +752,16 @@ th { color: var(--muted); font-weight: 700; }
   app.addEventListener("click", e => {
     const b = e.target.closest("button");
     if (!b) return;
-    if (b.id === "size") {
+    if (b.id === "famoff") { store.fam = null; persist(); home(); }
+    else if (b.id === "size") {
       store.big = !store.big; persist();
       document.documentElement.classList.toggle("big", store.big);
       b.textContent = store.big ? "글씨 보통" : "글씨 크게"; b.setAttribute("aria-pressed", store.big);
     } else if (b.dataset.go) views[b.dataset.go]();
     else if (b.dataset.play) play(b.dataset.play);
+    else if (b.dataset.spot) spotPlay(b.dataset.spot);
+    else if (b.dataset.clue || b.dataset.decoy) spotTap(b);
+    else if (b.id === "giveup" && sp && !sp.done) spotFinish(true);
     else if (b.dataset.pick) { cur.path.push(b.dataset.label); step(b.dataset.pick); }
     else if (b.dataset.ans !== undefined && test) {
       test.ans.push(+b.dataset.ans);
