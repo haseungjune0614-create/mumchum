@@ -1,8 +1,3 @@
-<!doctype html>
-<html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>멈춤 연습장</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -81,43 +76,6 @@ p { margin: 0; }
 .call { padding: 22px 16px; text-align: center; display: flex; flex-direction: column; gap: 6px; align-items: center; }
 .call .ring { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.08em; }
 .call .num { font-family: var(--font-display); font-size: 1.6rem; }
-.vframe { position: relative; aspect-ratio: 16 / 10; background: #0B1219; color: #FFFFFF; display: flex; align-items: flex-end; padding: 16px; box-sizing: border-box; }
-.vframe .vbadge { position: absolute; top: 12px; left: 12px; font-size: 0.7rem; font-weight: 700; background: #F2C230; color: #111; border-radius: 6px; padding: 2px 8px; }
-.vframe .vplay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -60%); width: 56px; height: 56px; border-radius: 50%; background: rgba(255,255,255,0.18); display: grid; place-items: center; font-size: 1.3rem; }
-.vframe .vcap { font-family: var(--font-display); font-size: 1.25rem; line-height: 1.3; text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
-/* 수상한 점 찾기: 영상 화면 위에 누를 수 있는 영역(.hot)을 겹쳐 둠 */
-.vstage { position: relative; aspect-ratio: 16 / 10; background: #0B1219; overflow: hidden; }
-.vstage svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.hot { font: inherit; color: inherit; background: none; border: 3px dashed transparent; border-radius: 10px; cursor: pointer; padding: 6px 8px; text-align: left; position: relative; }
-.hot.abs { position: absolute; padding: 0; }
-.hot:hover { border-color: var(--line); }
-.hot.found { border-color: var(--danger); border-style: solid; background: rgba(184, 50, 42, 0.14); }
-.hot.found::after { content: attr(data-n); position: absolute; top: -12px; left: -12px; width: 26px; height: 26px; border-radius: 50%; background: var(--danger); color: #fff; font: 700 0.8rem/26px var(--font-body); text-align: center; }
-.hot.reveal { border-color: var(--warn); border-style: solid; }
-/* 번호 배지는 상자 안쪽 왼쪽에: 화면 가장자리에서 잘리지 않고 글자도 가리지 않게 */
-.hot.found::after, .hot.reveal::after { top: 50% !important; left: 4px !important; transform: translateY(-50%); }
-.hot.found:not(:empty), .hot.reveal:not(:empty) { padding-left: 36px; }
-.hot.found:empty::after, .hot.reveal:empty::after { top: -12px !important; left: -12px !important; transform: none; } /* 그림 위 영역은 단서를 가리지 않게 바깥에 */
-.hot.reveal::after { content: attr(data-n); position: absolute; top: -12px; left: -12px; width: 26px; height: 26px; border-radius: 50%; background: var(--warn); color: #fff; font: 700 0.8rem/26px var(--font-body); text-align: center; }
-.vcap-hot { position: absolute; left: 8px; right: 8px; bottom: 8px; color: #fff; font-family: var(--font-display); font-size: 1.05rem; line-height: 1.3; background: rgba(0, 0, 0, 0.55); }
-.vtimer { position: absolute; top: 8px; right: 8px; color: #111; background: #F2C230; font-weight: 700; font-size: 0.75rem; padding: 2px 8px; }
-.vlogo { position: absolute; top: 8px; left: 8px; color: #fff; background: #C8102E; font-weight: 700; font-size: 0.75rem; padding: 2px 8px; }
-.vmeta { padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; border-top: 2px solid var(--line); }
-.vmeta .hot { width: 100%; }
-.cmt { font-size: 0.85rem; display: flex; flex-direction: column; gap: 4px; }
-.cmt span { color: var(--muted); font-size: 0.75rem; }
-.score { display: flex; align-items: center; justify-content: space-between; font-weight: 700; }
-.score b { font-family: var(--font-display); font-weight: 400; font-size: 1.6rem; color: var(--danger); }
-.found-list { margin: 0; padding-left: 1.4em; display: flex; flex-direction: column; gap: 8px; }
-.found-list li.miss { color: var(--warn); }
-.tip { font-size: 0.9rem; color: var(--muted); min-height: 1.4em; }
-.fam-banner { background: var(--safe-bg); border: 2px solid var(--safe); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
-.linkbox { font-size: 0.8rem; word-break: break-all; background: var(--bg); border: 2px solid var(--line); border-radius: 10px; padding: 10px; }
-@media (prefers-reduced-motion: no-preference) {
-  .hot.no { animation: shake .3s; }
-  @keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
-}
-.bub.say::before { content: "영상 속 말: "; font-size: 0.75rem; font-weight: 700; color: var(--muted); display: block; }
 .ask { font-weight: 700; font-size: 1.1rem; }
 .speak { font: inherit; font-size: 0.85rem; font-weight: 700; color: var(--accent); background: none; border: 2px solid var(--accent); border-radius: 999px; padding: 6px 14px; align-self: flex-start; cursor: pointer; }
 .verdict { border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 10px; border: 2px solid; }
@@ -163,62 +121,13 @@ th { color: var(--muted); font-weight: 700; }
 
 <script>
 (function () {
-  /* ---------- 설정 ----------
-     테스트 결과를 받을 구글 시트(Apps Script 웹 앱) 주소. 만드는 법: docs/sheet-setup.md
-     비워 두면 결과를 카카오톡으로 직접 보내는 방식으로 동작함 */
-  const SHEET_URL = "https://script.google.com/macros/s/AKfycbxeONYQZXP8vESY-b9G83ZGqzoY-OYHlxcWTKJYa9XPv2VjtMB3RR5XlFwUIf1EpKY/exec";
-
   /* ---------- 저장소 (브라우저 안에만 저장) ---------- */
   const KEY = "mumchum-v1";
   function load() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
   function save(d) { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) {} }
-  let store = Object.assign({ played: {}, tests: [], plays: [], spots: [], pw: "", big: false, fam: null, cur: "", staff: false, flow: null }, load());
+  let store = Object.assign({ played: {}, tests: [], plays: [], pw: "", big: false }, load());
   function persist() { save(store); }
   if (store.big) document.documentElement.classList.add("big");
-
-  /* ---------- 가족 맞춤 연습 ----------
-     자녀가 만든 링크 끝(#fam=...)에 호칭과 이름이 들어 있음. 서버로 보내지 않고 이 휴대폰에만 저장.
-     시나리오 글의 {P}는 부모님 호칭(엄마·아빠…), {C}는 자녀 이름으로 바뀜 */
-  try {
-    const m = location.hash.match(/^#fam=(.+)$/);
-    if (m) {
-      const f = JSON.parse(decodeURIComponent(m[1]));
-      store.fam = { p: String(f.p || "엄마").slice(0, 10), c: String(f.c || "").slice(0, 10) };
-      persist();
-      history.replaceState(null, "", location.pathname + location.search); // 주소창에서 이름 지우기
-    }
-  } catch (e) {}
-  // 헷갈리는 글자(0·O, 1·I)를 뺀 4글자 번호. 결과 카톡에 같이 담겨 여러 분 결과를 구별함
-  function newPid() {
-    const c = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
-    let id = ""; for (let i = 0; i < 4; i++) id += c[Math.floor(Math.random() * c.length)];
-    return "참여자-" + id;
-  }
-  let openFlow = false; // ?test 링크로 열었으면 처음 화면 대신 테스트 안내로
-  /* ---------- 진행자 모드 ----------
-     주소 끝에 ?staff 를 붙여 한 번 열면 이 휴대폰에서 연구용 메뉴(사전·사후 문제, 기록)가 보임.
-     어르신이 쓰는 평소 주소에서는 숨김. 기록은 기기 안에만 있어 비밀번호가 필요한 정보는 없음 */
-  try {
-    const q = new URLSearchParams(location.search);
-    if (q.has("staff")) {
-      store.staff = true; persist();
-      history.replaceState(null, "", location.pathname + location.hash); // 주소창에서 ?staff 지우기
-    }
-    /* 혼자 하는 테스트: 모두에게 같은 주소(?test)를 보내면 휴대폰마다 참여자 번호가 자동으로 붙음.
-       누가 보냈는지는 결과를 받는 카톡 대화방으로 알 수 있어서, 이름·전화번호를 묻지 않음.
-       사전 문제 → 연습 7개 → 사후 문제 → 결과 보내기 까지 버튼만 따라가면 됨 */
-    if (q.has("test")) {
-      const given = String(q.get("test") || "").replace(/[^0-9A-Za-z가-힣]/g, "").slice(0, 10); // ?test=3 처럼 직접 줘도 됨
-      if (given) { if (!store.flow || store.flow.pid !== "참여자" + given) store.flow = { pid: "참여자" + given, stage: "intro" }; }
-      else if (!store.flow) store.flow = { pid: newPid(), stage: "intro" }; // 같은 폰에서 다시 열면 하던 곳부터
-      const pid = store.flow.pid;
-      if (pid) store.cur = pid;
-      persist(); openFlow = true;
-      history.replaceState(null, "", location.pathname + location.hash);
-    }
-  } catch (e) {}
-
-  const tpl = t => String(t).replace(/\{P\}/g, (store.fam && store.fam.p) || "엄마").replace(/\{C\}/g, store.fam && store.fam.c ? ", " + store.fam.c : "");
 
   /* ---------- 시나리오 데이터 ---------- */
   const SC = [
@@ -226,13 +135,13 @@ th { color: var(--muted); font-weight: 700; }
       id: "child", tag: "메신저", title: "자녀를 사칭한 문자",
       who: "모르는 번호", sub: "010-5821-●●●● · 문자", kind: "chat",
       nodes: {
-        start: { msgs: [["them", "{P} 나야{C}. 폰 액정이 깨져서 수리 맡겼어 ㅠㅠ"], ["them", "이 번호는 임시폰이야. 급하게 부탁할 게 있는데 문자로 해줄 수 있어?"]],
+        start: { msgs: [["them", "엄마 나야. 폰 액정이 깨져서 수리 맡겼어 ㅠㅠ"], ["them", "이 번호는 임시폰이야. 급하게 부탁할 게 있는데 문자로 해줄 수 있어?"]],
           ask: "어떻게 하시겠어요?",
           choices: [["그래, 무슨 일이야? 하고 답장한다", "n2"], ["평소 쓰던 번호로 아이에게 직접 전화해 본다", "safe1"], ["누군지 모르니 답장하지 않는다", "safe2"]] },
-        n2: { msgs: [["me", "그래, 무슨 일이야?"], ["them", "온라인으로 결제할 게 있는데 내 폰이 안 돼서. {P} 신분증 사진이랑 카드 번호 좀 보내줘"], ["them", "급해서 그래 빨리~"]],
+        n2: { msgs: [["me", "그래, 무슨 일이야?"], ["them", "온라인으로 결제할 게 있는데 내 폰이 안 돼서. 엄마 신분증 사진이랑 카드 번호 좀 보내줘"], ["them", "급해서 그래 빨리~"]],
           ask: "아이가 급하다고 해요. 어떻게 하시겠어요?",
           choices: [["신분증 사진과 카드 번호를 보낸다", "danger1"], ["가족 암호를 물어본다", "n3"], ["\"네 원래 번호로 전화할게\" 하고 대화를 멈춘다", "safe1"]] },
-        n3: { msgs: [["me", "우리 집 암호가 뭐였지?"], ["them", "{P} 지금 그런 거 물어볼 때야? 급하다니까!!"], ["them", "나중에 다 설명할게. 일단 보내줘"]],
+        n3: { msgs: [["me", "우리 집 암호가 뭐였지?"], ["them", "엄마 지금 그런 거 물어볼 때야? 급하다니까!!"], ["them", "나중에 다 설명할게. 일단 보내줘"]],
           ask: "암호를 대답하지 못해요.",
           choices: [["이상하다. 원래 번호로 아이에게 전화한다", "safe1"], ["애가 급하다니 그냥 보내준다", "danger1"]] },
         safe1: { end: "safe", text: "원래 번호로 전화해 보니 아이는 회사에서 일하는 중이었어요. 문자는 사기였습니다." },
@@ -306,143 +215,8 @@ th { color: var(--muted); font-weight: 700; }
         danger1: { end: "danger", text: "설치한 앱으로 사기범이 휴대폰을 마음대로 조종해 계좌의 돈을 빼 갔어요." }
       },
       lesson: ["모르는 카드 발급 문자는 미끼입니다. 문자 속 번호로 전화하지 마세요.", "카드사나 은행 확인은 카드 뒷면이나 통장에 적힌 번호로 직접 하세요.", "전화로 앱을 설치하라고 하면 사기입니다."]
-    },
-    {
-      id: "aidoctor", tag: "AI 영상", title: "AI 가짜 의사의 건강식품 광고",
-      who: "닥터건강TV", sub: "광고 · 조회수 128만회", kind: "video", badge: "광고",
-      screen: "30년 정형외과 의사가 말하는\n무릎 통증, 이것 하나면 끝",
-      nodes: {
-        start: { msgs: [["them", "안녕하세요, 30년 경력 정형외과 의사입니다."], ["them", "무릎 연골, 약에만 의지하지 마세요. 이 추출물 하나면 2주 만에 계단을 가볍게 오릅니다."], ["them", "오늘 영상 보신 분만 70% 할인! 곧 마감됩니다."], ["note", "화면 아래에 [지금 구매하기] 버튼이 깜빡여요."]],
-          ask: "의사가 직접 나와서 권해요. 어떻게 하시겠어요?",
-          choices: [["의사가 하는 말이니 [지금 구매하기]를 누른다", "n2"], ["다니는 병원 의사나 약사에게 이 제품을 물어본다", "safe1"], ["자녀에게 영상을 보여 주고 같이 살펴본다", "safe2"]] },
-        n2: { msgs: [["note", "구매 화면이 나왔어요.\n'3개월분 189,000원 → 오늘만 56,700원\n이름, 주소, 카드번호를 입력하세요'"], ["note", "다시 보니 영상 속 의사의 입 모양이 말과 조금 어긋나 보여요."]],
-          ask: "할인이 오늘까지래요.",
-          choices: [["놓치기 전에 카드번호를 입력한다", "danger1"], ["뭔가 이상하다. 화면을 닫고 가족에게 물어본다", "warn1"]] },
-        safe1: { end: "safe", text: "약사에게 물어보니 '먹기만 하면 낫는' 건강식품은 없다고 했어요. 영상 속 의사는 AI로 만든 가짜였습니다." },
-        safe2: { end: "safe", text: "자녀가 함께 보더니 AI로 만든 가짜 의사라고 알려줬어요. 'AI로 만든 영상'이라는 표시도 없었어요." },
-        warn1: { end: "warn", text: "결제 전에 잘 멈추셨어요. 이미 돈을 냈다면 카드사와 1372(소비자상담센터)에 바로 알리세요." },
-        danger1: { end: "danger", text: "평범한 식품을 비싸게 산 데다, 카드 정보가 넘어가 다른 결제까지 빠져나갔어요. 먹던 약을 끊어 무릎 통증도 심해졌어요." }
-      },
-      lesson: ["광고 속 의사·유명인은 AI로 만든 가짜일 수 있어요. 영상에서 특정 제품을 사라고 하면 의심하세요.", "'먹기만 하면 낫는다', '오늘만 할인'은 과장 광고의 신호예요.", "사기 전에, 그리고 먹던 약을 끊기 전에 다니는 병원 의사나 약사에게 먼저 물어보세요."]
-    },
-    {
-      id: "fakenews", tag: "AI 영상", title: "지원금 준다는 가짜 뉴스 영상",
-      who: "속보뉴스24", sub: "조회수 54만회 · 3시간 전", kind: "video", badge: "속보",
-      screen: "65세 이상 '특별 생활지원금'\n50만 원 지급 확정",
-      nodes: {
-        start: { msgs: [["them", "정부가 65세 이상 어르신께 특별 생활지원금 50만 원을 지급하기로 했습니다."], ["them", "신청은 이번 주 금요일까지, 영상 아래 링크에서만 받습니다."], ["note", "영상 설명란: 신청하기 |gov-support.kr-apply.top|"]],
-          ask: "뉴스라서 믿음이 가요. 어떻게 하시겠어요?",
-          choices: [["링크를 눌러 바로 신청한다", "n2"], ["친구들 단체방에 영상을 공유한다", "n3"], ["주민센터나 129(보건복지상담센터)에 진짜인지 물어본다", "safe1"]] },
-        n2: { msgs: [["note", "정부 사이트처럼 생긴 화면이 나왔어요.\n'지원금 받을 계좌번호, 주민등록번호, 휴대폰 인증번호를 입력하세요'"]],
-          ask: "지원금 받을 계좌를 적으래요.",
-          choices: [["모두 입력하고 인증번호도 넣는다", "danger1"], ["인증번호까지 달라니 이상하다. 닫고 주민센터에 물어본다", "warn1"]] },
-        n3: { msgs: [["me", "이것 좀 봐요, 50만 원 준대요!"], ["note", "단체방 친구가 답했어요: '이거 AI로 만든 가짜 뉴스래. 우리 아들이 그러더라.'"]],
-          ask: "친구가 가짜라고 해요.",
-          choices: [["그래도 혹시 모르니 링크를 눌러 본다", "n2"], ["공유한 영상을 지우고 주민센터에 확인한다", "warn2"]] },
-        safe1: { end: "safe", text: "주민센터에서는 그런 지원금이 없다고 했어요. 영상 속 아나운서는 AI로 만든 가짜였습니다." },
-        warn1: { end: "warn", text: "개인정보를 넣기 전에 멈추셨어요. 이미 무언가 입력했다면 가족에게 알리고 118(한국인터넷진흥원)에 상담하세요." },
-        warn2: { end: "warn", text: "가짜 뉴스를 여러 사람에게 퍼뜨릴 뻔했어요. 놀라운 소식일수록 공유하기 전에 먼저 확인해요." },
-        danger1: { end: "danger", text: "주민등록번호와 인증번호로 사기범이 어르신 이름의 휴대폰을 만들고 대출을 받았어요. 지원금은 처음부터 없었습니다." }
-      },
-      lesson: ["정부 지원금은 영상 속 링크로 신청하지 않아요. 주민센터나 129에 먼저 물어보세요.", "아나운서와 뉴스 화면도 AI로 진짜처럼 만들 수 있어요. 믿을 만한 방송사 뉴스에도 나오는지 확인하세요.", "놀라운 영상일수록 공유하기 전에 멈추세요. 가족과 친구가 피해를 볼 수 있어요."]
     }
   ];
-
-  /* ---------- 수상한 점 찾기 (AI 영상 시나리오 뒤에 이어짐) ----------
-     stage: 영상 화면 그림(SVG) 위에 누를 수 있는 버튼을 겹친 HTML
-       data-clue="키"  → 진짜 단서 (clues[키]에 이름과 이유)
-       data-decoy="키" → 단서처럼 보이지만 아닌 곳 (decoys[키]에 안내)
-     위치(left/top/width/height)는 영상 화면 크기에 대한 % 라서 화면 크기가 바뀌어도 맞음 */
-  const SPOT = {
-    aidoctor: {
-      intro: "방금 본 광고에는 가짜를 알아챌 수 있는 단서가 6개 숨어 있어요. 수상한 곳을 손가락으로 눌러 보세요.",
-      stage: `
-        <div class="vstage">
-          <svg viewBox="0 0 320 200" aria-hidden="true">
-            <rect width="320" height="200" fill="#22323F"/>
-            <rect x="18" y="22" width="70" height="96" rx="4" fill="#2C4254"/>
-            <rect x="26" y="34" width="54" height="6" fill="#3E5A70"/><rect x="26" y="58" width="54" height="6" fill="#3E5A70"/><rect x="26" y="82" width="54" height="6" fill="#3E5A70"/>
-            <path d="M282 30h10v12h12v10h-12v12h-10V52h-12V42h12z" fill="#3FA66B"/>
-            <path d="M70 200 Q76 140 150 126 Q224 140 230 200 Z" fill="#F4F6F8"/>
-            <path d="M134 128 L150 162 L166 128 Z" fill="#9EC3E6"/>
-            <rect x="140" y="108" width="20" height="22" fill="#E8B993"/>
-            <circle cx="150" cy="86" r="32" fill="#F1C7A3"/>
-            <path d="M118 82 Q120 50 150 50 Q182 50 182 82 Q172 64 150 64 Q128 64 118 82 Z" fill="#3A3A3A"/>
-            <circle cx="138" cy="88" r="8" fill="none" stroke="#333" stroke-width="2"/><circle cx="162" cy="88" r="8" fill="none" stroke="#333" stroke-width="2"/><path d="M146 88h8" stroke="#333" stroke-width="2"/>
-            <path d="M139 104 Q150 112 161 104" fill="none" stroke="#8A4B3A" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M128 132 Q118 166 140 176" fill="none" stroke="#555" stroke-width="3"/><circle cx="142" cy="176" r="5" fill="#777"/>
-            <rect x="96" y="148" width="58" height="20" rx="3" fill="#fff" stroke="#14558F" stroke-width="2"/>
-            <text x="125" y="162" font-size="11" text-anchor="middle" fill="#14558F" font-weight="700">전문의</text>
-            <path d="M214 150 Q206 136 214 122" fill="none" stroke="#F4F6F8" stroke-width="18" stroke-linecap="round"/>
-            <rect x="228" y="92" width="36" height="62" rx="7" fill="#6B3E1E"/><rect x="234" y="82" width="24" height="12" rx="2" fill="#DDD"/>
-            <rect x="230" y="108" width="32" height="24" fill="#F2C230"/><text x="246" y="124" font-size="9" text-anchor="middle" fill="#111" font-weight="700">관절쏙</text>
-            <ellipse cx="216" cy="122" rx="12" ry="20" fill="#F1C7A3"/>
-            <g fill="#F1C7A3" stroke="#C9967A" stroke-width="1"><ellipse cx="232" cy="100" rx="11" ry="4"/><ellipse cx="233" cy="109" rx="11" ry="4"/><ellipse cx="234" cy="118" rx="11" ry="4"/><ellipse cx="234" cy="127" rx="11" ry="4"/><ellipse cx="233" cy="136" rx="11" ry="4"/><ellipse cx="231" cy="145" rx="10" ry="4"/></g>
-          </svg>
-          <button class="hot abs" data-clue="hand" aria-label="제품을 든 손" style="left:63%;top:44%;width:18%;height:34%"></button>
-          <button class="hot abs" data-clue="tag" aria-label="가슴의 이름표" style="left:28%;top:71%;width:22%;height:16%"></button>
-          <button class="hot abs" data-decoy="face" aria-label="의사의 얼굴" style="left:35%;top:24%;width:24%;height:36%"></button>
-          <button class="hot abs vtimer" data-clue="timer">오늘만 70% · 마감 03:12</button>
-        </div>
-        <button class="hot" data-clue="cap" style="display:block;width:100%;background:#0B1219;color:#fff;font-family:var(--font-display);font-size:1.1rem;border-radius:0">먹기만 하면 2주 만에 무릎 통증 끝!</button>
-        <div class="vmeta">
-          <button class="hot" data-decoy="views"><b>닥터건강TV</b> · 광고 · 조회수 128만회</button>
-          <button class="hot" data-clue="url">지금 구매하기 ▶ <span class="url" style="color:var(--accent);text-decoration:underline">knee-shop.kr-xn.top</span></button>
-          <button class="hot cmt" data-clue="cmt"><span>댓글 3,214개</span>저도 효과 봤어요!! 계단 뛰어다녀요<br>우리 엄마도 효과 봤어요!! 최고예요<br>진짜 효과 있어요!! 강력 추천</button>
-        </div>`,
-      clues: {
-        hand: ["손가락이 6개", "AI가 만든 영상은 손가락·귀·글자처럼 작은 부분이 어색할 때가 많아요. 요즘은 점점 자연스러워져서 이것만 믿으면 안 돼요."],
-        tag: ["이름도 병원도 없는 '전문의'", "누구인지 확인할 수 없는 의사예요. 이름과 병원을 알 수 없으면 진짜 의사인지 믿기 어려워요."],
-        timer: ["'오늘만', '마감' 압박", "생각할 시간을 뺏어서 바로 사게 만들려는 말이에요."],
-        cap: ["먹기만 하면 낫는다는 말", "식품을 먹기만 하면 병이 낫는다고 하는 건 과장 광고예요."],
-        url: ["이상한 구매 주소", "처음 보는 주소에 이름과 카드번호를 넣으면 안 돼요."],
-        cmt: ["똑같은 말투의 칭찬 댓글", "느낌표까지 비슷한 칭찬이 줄줄이 달려 있어요. 가짜 계정이 단 댓글일 수 있어요."]
-      },
-      decoys: {
-        face: "얼굴만 보고는 알기 어려워요. AI는 사람 얼굴을 진짜처럼 만들 수 있거든요. 다른 곳을 찾아보세요.",
-        views: "조회수가 많다고 믿을 수 있는 건 아니지만, 이것만으로 가짜인지 알 수는 없어요."
-      }
-    },
-    fakenews: {
-      intro: "방금 본 뉴스 영상에는 가짜를 알아챌 수 있는 단서가 5개 숨어 있어요. 수상한 곳을 손가락으로 눌러 보세요.",
-      stage: `
-        <div class="vstage">
-          <svg viewBox="0 0 320 200" aria-hidden="true">
-            <rect width="320" height="200" fill="#12325A"/>
-            <g fill="#1C4677"><rect x="0" y="90" width="30" height="70"/><rect x="34" y="70" width="24" height="90"/><rect x="62" y="96" width="30" height="64"/><rect x="232" y="76" width="26" height="84"/><rect x="262" y="100" width="24" height="60"/><rect x="290" y="66" width="30" height="94"/></g>
-            <path d="M88 200 Q94 136 160 124 Q226 136 232 200 Z" fill="#2B2F3A"/>
-            <path d="M144 126 L160 160 L176 126 Z" fill="#F4F6F8"/>
-            <path d="M156 132 L164 132 L167 170 L160 178 L153 170 Z" fill="#C8102E"/>
-            <rect x="150" y="106" width="20" height="22" fill="#E8B993"/>
-            <circle cx="160" cy="84" r="30" fill="#F1C7A3"/>
-            <path d="M130 84 Q128 50 160 50 Q192 50 190 84 Q186 62 160 60 Q136 62 130 84 Z" fill="#2A2420"/>
-            <circle cx="149" cy="84" r="3" fill="#333"/><circle cx="171" cy="84" r="3" fill="#333"/>
-            <path d="M150 100 Q160 106 170 100" fill="none" stroke="#8A4B3A" stroke-width="2.5" stroke-linecap="round"/>
-            <rect x="0" y="168" width="320" height="32" fill="#0E1E33"/>
-          </svg>
-          <button class="hot abs vlogo" data-clue="logo">속보뉴스24</button>
-          <button class="hot abs vtimer" data-clue="timer">신청 마감: 이번 주 금요일</button>
-          <button class="hot abs" data-decoy="anchor" aria-label="아나운서" style="left:30%;top:22%;width:40%;height:62%"></button>
-        </div>
-        <button class="hot" data-clue="cap" style="display:block;width:100%;background:#C8102E;color:#fff;font-family:var(--font-display);font-size:1.1rem;border-radius:0">[속보] 65세 이상 50만 원 · 영상 아래 링크에서만 신청</button>
-        <div class="vmeta">
-          <button class="hot" data-decoy="views">조회수 54만회 · 3시간 전</button>
-          <button class="hot" data-clue="url">신청하기 ▶ <span class="url" style="color:var(--accent);text-decoration:underline">gov-support.kr-apply.top</span></button>
-          <button class="hot cmt" data-clue="cmt"><span>댓글 892개</span>신청했더니 바로 입금됐어요!!<br>저도 어제 받았어요!! 빨리 하세요<br>마감 전에 꼭 신청하세요!!</button>
-        </div>`,
-      clues: {
-        logo: ["처음 보는 방송사 이름", "'속보뉴스24'는 알려진 방송사가 아니에요. 큰 소식이라면 믿을 만한 방송사 뉴스에도 나와요."],
-        cap: ["'링크에서만 신청'", "정부 지원금은 영상 속 링크로만 받지 않아요. 주민센터나 129에서 확인할 수 있어요."],
-        timer: ["'이번 주 금요일 마감' 압박", "서두르게 만들어서 확인할 시간을 뺏으려는 말이에요."],
-        url: ["정부 주소가 아님", "정부 누리집 주소는 'go.kr'로 끝나요. 이 주소는 정부가 아니에요."],
-        cmt: ["'입금됐어요' 가짜 후기", "비슷한 말투로 신청을 재촉하는 댓글은 가짜 계정이 단 것일 수 있어요."]
-      },
-      decoys: {
-        anchor: "아나운서 모습만으로는 알 수 없어요. AI는 사람 모습과 목소리를 진짜처럼 만들 수 있거든요. 다른 곳을 찾아보세요.",
-        views: "조회수가 많다고 믿을 수 있는 건 아니지만, 이것만으로 가짜인지 알 수는 없어요."
-      }
-    }
-  };
 
   /* ---------- 사전·사후 문제 (같은 문제를 전후에 사용) ---------- */
   const QUIZ = [
@@ -455,9 +229,7 @@ th { color: var(--muted); font-weight: 700; }
     { q: "검찰 수사관이라며 \"통장 돈을 안전계좌로 옮기라\"는 전화가 왔어요.",
       o: ["수사에 협조하려고 돈을 옮긴다", "가족에게 말하지 말라니 혼자 처리한다", "전화를 끊고 112나 가족에게 알린다"], a: 2 },
     { q: "신청한 적 없는 카드가 발급됐다며 고객센터 번호가 적힌 문자가 왔어요.",
-      o: ["카드 뒷면에 적힌 번호로 직접 전화한다", "문자 속 고객센터 번호로 전화한다", "문자 속 링크를 눌러 취소한다"], a: 0 },
-    { q: "유튜브에서 의사가 나와 \"이 건강식품만 먹으면 무릎이 낫는다, 오늘만 할인\"이라고 하는 영상을 봤어요.",
-      o: ["의사가 직접 권하니 믿고 산다", "효과 봤다는 댓글이 많은지 확인하고 산다", "사기 전에 다니는 병원 의사나 약사에게 물어본다"], a: 2 }
+      o: ["카드 뒷면에 적힌 번호로 직접 전화한다", "문자 속 고객센터 번호로 전화한다", "문자 속 링크를 눌러 취소한다"], a: 0 }
   ];
 
   /* ---------- 도우미 ---------- */
@@ -482,34 +254,23 @@ th { color: var(--muted); font-weight: 700; }
     stopSpeak();
     app.innerHTML = header() + `<div class="screen stack" style="gap:18px">${html}</div>`;
     window.scrollTo(0, 0);
-    shownAt = Date.now();
   }
-  let shownAt = 0; // 손떨림·두 번 누름으로 다음 화면 답이 같이 눌리는 것 방지
   const endLabel = { safe: "잘하셨어요! 안전합니다", warn: "아슬아슬했어요", danger: "사기를 당했어요" };
 
   /* ---------- 화면: 처음 ---------- */
   function home() {
     const doneCount = SC.filter(s => store.played[s.id]).length;
     render(`
-      ${flowBanner()}
-      <h1>이상한 <span style="white-space:nowrap">문자·전화·영상,</span><br>미리 겪어 보고 막아요</h1>
+      <h1>이상한 문자와 전화,<br>미리 겪어 보고 막아요</h1>
       <p class="lead">진짜 같은 사기 상황이 나와요. 버튼을 눌러 어떻게 할지 고르면, 무엇이 안전한지 알려 드려요.</p>
       <div class="rule" aria-label="기억할 세 가지">
         <div><b>멈춤</b>바로 하지 않기</div><div><b>끊기</b>전화·문자 끊기</div><div><b>확인</b>원래 번호로 전화</div>
       </div>
-      ${store.fam ? `<div class="fam-banner">
-        <p><b>${esc(store.fam.c || "가족")}님이 보낸 맞춤 연습이 있어요</b><br>자녀를 사칭한 사기 문자가 우리 가족 이름으로 나와요.</p>
-        <button class="btn primary" data-play="child">맞춤 연습 하기</button>
-        <button class="link" id="famoff" style="align-self:flex-start">맞춤 연습 끄기</button></div>` : ""}
       <button class="btn primary" data-go="list">연습 시작하기</button>
-      ${store.flow ? "" : `<button class="btn" id="flowjoin"><span class="grow">연습 효과 테스트 참여하기</span><span class="tag">30분</span></button>`}
       <button class="btn" data-go="family"><span class="grow">우리 가족 암호 정하기</span><span class="tag">${store.pw ? "정함" : "아직"}</span></button>
       <p class="trail">연습한 상황 ${doneCount} / ${SC.length}</p>
-      ${store.staff ? `
-      ${store.cur ? `<p class="trail">진행자용 · 지금 참여자: ${esc(store.cur)} <button class="link" id="curoff">테스트 끝내기</button></p>` : ""}
       <button class="link" data-go="testSetup">연구용: 사전·사후 문제 풀기</button>
       <button class="link" data-go="records">연구용: 저장된 기록 보기</button>
-      <button class="link" id="staffoff">진행자 모드 끄기</button>` : ""}
     `);
   }
 
@@ -533,16 +294,11 @@ th { color: var(--muted); font-weight: 700; }
   function step(nodeId) {
     const s = cur.s, n = s.nodes[nodeId];
     if (n.end) return ending(n);
-    const video = s.kind === "video";
-    const msgs = n.msgs.map(([w, t]) => `<div class="bub ${w === "me" ? "me" : w === "note" ? "note" : video ? "say" : ""}">${fmt(tpl(t))}</div>`).join("");
-    const icon = { call: "☎", chat: "✉", video: "▶" }[s.kind];
-    const head = `<div class="phone-head"><div class="avatar" aria-hidden="true">${icon}</div><div class="who">${esc(s.who)}<div class="sub">${esc(s.sub)}</div></div></div>`;
+    const msgs = n.msgs.map(([w, t]) => `<div class="bub ${w === "me" ? "me" : w === "note" ? "note" : ""}">${fmt(t)}</div>`).join("");
     const top = s.kind === "call" && nodeId === "start"
       ? `<div class="call"><span class="ring">걸려온 전화</span><span class="num">${esc(s.who)}</span></div>`
-      : video && nodeId === "start"
-        ? `<div class="vframe" role="img" aria-label="영상 화면: ${esc(plain(s.screen))}"><span class="vbadge">${esc(s.badge)}</span><span class="vplay" aria-hidden="true">▶</span><span class="vcap">${fmt(s.screen)}</span></div>${head}`
-        : head;
-    const readText = (video && nodeId === "start" ? plain(s.screen) + ". " : "") + n.msgs.map(m => plain(tpl(m[1]))).join(" ") + " " + n.ask + " " + n.choices.map((c, i) => (i + 1) + "번, " + c[0]).join(". ");
+      : `<div class="phone-head"><div class="avatar" aria-hidden="true">${s.kind === "call" ? "☎" : "✉"}</div><div class="who">${esc(s.who)}<div class="sub">${esc(s.sub)}</div></div></div>`;
+    const readText = n.msgs.map(m => plain(m[1])).join(" ") + " " + n.ask + " " + n.choices.map((c, i) => (i + 1) + "번, " + c[0]).join(". ");
     render(`
       <p class="trail">${esc(s.title)}</p>
       <div class="phone">${top}<div class="chat">${msgs}</div></div>
@@ -555,205 +311,17 @@ th { color: var(--muted); font-weight: 700; }
   function ending(n) {
     const s = cur.s;
     store.played[s.id] = n.end;
-    store.plays.push({ t: new Date().toISOString(), pid: store.cur || "", id: s.id, end: n.end, path: cur.path.join(" > ") });
+    store.plays.push({ t: new Date().toISOString(), id: s.id, end: n.end, path: cur.path.join(" > ") });
     persist();
+    const idx = SC.indexOf(s), next = SC[idx + 1];
     render(`
       <div class="verdict ${n.end}"><span class="stamp">${endLabel[n.end]}</span><p>${esc(n.text)}</p></div>
       <div class="lesson"><h2>이것만 기억하세요</h2><ol>${s.lesson.map(l => `<li>${esc(l)}</li>`).join("")}</ol>
         <button class="speak" id="read">소리로 듣기</button></div>
-      ${SPOT[s.id] ? `<button class="btn primary" data-spot="${s.id}">영상 다시 보며 수상한 점 찾기</button>` : nextButton(s)}
-      ${inFlow() ? "" : `<div class="row"><button class="btn" data-play="${s.id}">다시 해 보기</button><button class="btn" data-go="list">목록으로</button></div>`}
+      ${next ? `<button class="btn primary" data-play="${next.id}">다음 상황: ${esc(next.title)}</button>` : `<button class="btn primary" data-go="family">마지막으로, 가족 암호 정하기</button>`}
+      <div class="row"><button class="btn" data-play="${s.id}">다시 해 보기</button><button class="btn" data-go="list">목록으로</button></div>
     `);
-    document.getElementById("read").onclick = () => speak(endLabel[n.end] + ". " + n.text + " 이것만 기억하세요. " + tpl(s.lesson.join(" ")));
-  }
-  // 다음 시나리오로 가는 버튼 (마지막이면 가족 암호로)
-  function nextButton(s) {
-    const next = SC[SC.indexOf(s) + 1];
-    if (!next && inFlow()) return `<button class="btn primary" id="flowpost">3단계: 처음에 푼 문제 다시 풀기</button>`;
-    return next ? `<button class="btn primary" data-play="${next.id}">다음 상황: ${esc(next.title)}</button>`
-      : `<button class="btn primary" data-go="family">마지막으로, 가족 암호 정하기</button>`;
-  }
-
-  /* ---------- 화면: 수상한 점 찾기 ---------- */
-  let sp = null; // { s, d, found:[키...], t0, done }
-  function spotPlay(id) {
-    const s = SC.find(x => x.id === id), d = SPOT[id], total = Object.keys(d.clues).length;
-    sp = { s, d, found: [], t0: Date.now(), done: false };
-    render(`
-      <p class="trail">${esc(s.title)} · 수상한 점 찾기</p>
-      <h2>수상한 점을 찾아보세요</h2>
-      <p class="lead">${esc(d.intro)}</p>
-      <div class="phone" id="stage">${d.stage}</div>
-      <p class="tip" id="tip" aria-live="polite"></p>
-      <div class="card"><div class="score"><span>찾은 단서</span><b id="cnt">0 / ${total}</b></div><ol class="found-list" id="flist"></ol></div>
-      <button class="btn" id="giveup">더 못 찾겠어요. 정답 보기</button>
-      <div id="after" class="stack"></div>
-    `);
-  }
-  function spotTap(b) {
-    if (!sp || sp.done) return;
-    const d = sp.d, tip = document.getElementById("tip");
-    if (b.dataset.decoy) {
-      tip.textContent = d.decoys[b.dataset.decoy];
-      b.classList.remove("no"); void b.offsetWidth; b.classList.add("no"); // 흔들림 애니메이션 다시 재생
-      return;
-    }
-    const k = b.dataset.clue;
-    if (sp.found.includes(k)) return;
-    sp.found.push(k);
-    b.classList.add("found"); b.dataset.n = sp.found.length;
-    const [name, why] = d.clues[k];
-    document.getElementById("flist").insertAdjacentHTML("beforeend", `<li><b>${esc(name)}</b>: ${esc(why)}</li>`);
-    document.getElementById("cnt").textContent = sp.found.length + " / " + Object.keys(d.clues).length;
-    tip.textContent = "찾았어요! " + name;
-    speak(name + ". " + why);
-    if (sp.found.length === Object.keys(d.clues).length) spotFinish(false);
-  }
-  function spotFinish(gaveUp) {
-    sp.done = true;
-    const d = sp.d, keys = Object.keys(d.clues), total = keys.length, got = sp.found.length;
-    let n = got;
-    keys.filter(k => !sp.found.includes(k)).forEach(k => {
-      const b = document.querySelector(`#stage [data-clue="${k}"]`);
-      b.classList.add("reveal"); b.dataset.n = ++n;
-      const [name, why] = d.clues[k];
-      document.getElementById("flist").insertAdjacentHTML("beforeend", `<li class="miss"><b>놓친 단서 · ${esc(name)}</b>: ${esc(why)}</li>`);
-    });
-    store.spots.push({ t: new Date().toISOString(), pid: store.cur || "", id: sp.s.id, found: got, total, sec: Math.round((Date.now() - sp.t0) / 1000), gaveUp });
-    persist();
-    document.getElementById("giveup").remove();
-    document.getElementById("tip").textContent = "";
-    document.getElementById("after").innerHTML = `
-      <div class="verdict ${got === total ? "safe" : "warn"}"><span class="stamp">${got === total ? "모두 찾았어요!" : `${total}개 중 ${got}개를 찾았어요`}</span>
-        <p>${got === total ? "이제 비슷한 영상을 보면 이 단서들을 먼저 살펴보세요." : "놓친 곳은 노란색으로 표시했어요. 위 목록에서 이유를 읽어 보세요."} 단서를 하나라도 찾았다면, 사거나 신청하기 전에 꼭 가족이나 약사·주민센터에 먼저 물어보세요.</p></div>
-      ${nextButton(sp.s)}`;
-    document.getElementById("after").scrollIntoView({ behavior: "smooth", block: "nearest" });
-  }
-
-  /* ---------- 혼자 하는 테스트 ---------- */
-  function inFlow() { return !!(store.flow && store.flow.stage === "practice"); }
-  function flowBanner() {
-    const f = store.flow;
-    if (!f) return "";
-    if (f.stage === "done") return `<div class="fam-banner"><p><b>테스트를 마치셨어요. 고맙습니다!</b><br>${SHEET_URL ? (f.sent ? "결과는 선생님께 전달됐어요." : "결과가 아직 전달되지 않았어요.") : "결과를 아직 안 보내셨다면 눌러 주세요."}</p>
-      ${SHEET_URL && f.sent ? "" : `<button class="btn primary" id="flowresult">결과 보내기</button>`}
-      <button class="link" id="flownew" style="align-self:flex-start">다른 분이 이 휴대폰으로 새로 하기</button></div>`;
-    const where = { intro: "시작 전", pre: "1단계 문제", practice: "2단계 연습", post: "3단계 문제" }[f.stage] || "";
-    return `<div class="fam-banner"><p><b>하승준 학생의 연습 테스트</b><br>지금: ${where}</p>
-      <button class="btn primary" id="flowgo">${f.stage === "intro" ? "테스트 시작하기" : "이어서 하기"}</button></div>`;
-  }
-  function flowIntro() {
-    render(`
-      <h2>연습 테스트에 와 주셔서 고맙습니다</h2>
-      <p class="lead">가천대학교 하승준 학생이 만든 사기 예방 연습이에요. 시험이 아니라 앱이 잘 만들어졌는지 보는 거라, 틀려도 전혀 괜찮아요.</p>
-      <div class="card">
-        <p><b>이렇게 진행돼요 (30분쯤)</b></p>
-        <ol style="margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:6px">
-          <li>문제 ${QUIZ.length}개 풀기</li>
-          <li>사기 상황 ${SC.length}개 연습하기</li>
-          <li>처음 문제 다시 풀기</li>
-          <li>${SHEET_URL ? "끝! 결과는 선생님께 자동으로 전달돼요" : "결과를 카카오톡으로 보내기"}</li>
-        </ol>
-        <p>이름이나 전화번호는 묻지 않아요. 중간에 멈춰도 이 주소를 다시 열면 이어서 할 수 있어요.</p>
-      </div>
-      <button class="btn primary" id="flowstart">1단계: 문제 풀기 시작</button>
-    `);
-  }
-  // '이어서 하기': 저장된 기록을 보고 멈춘 곳부터 다시 시작
-  function flowGo() {
-    const f = store.flow, did = ph => store.tests.some(r => r.pid === f.pid && r.phase === ph);
-    if (f.stage === "intro") return flowIntro();
-    if (f.stage === "pre" && did("사전")) f.stage = "practice";
-    if (f.stage === "pre") return startTest(f.pid, "사전");
-    if (f.stage === "practice") {
-      const next = SC.find(sc => !store.plays.some(p => p.pid === f.pid && p.id === sc.id));
-      if (next) { persist(); return play(next.id); }
-      f.stage = "post";
-    }
-    persist();
-    if (f.stage === "post") return startTest(f.pid, "사후");
-    flowResult();
-  }
-  // 이 참여자의 기록만 모아 사람이 읽는 요약 + 분석용 CSV로 만들기
-  function flowReport() {
-    const pid = store.flow.pid;
-    const last = ph => store.tests.filter(r => r.pid === pid && r.phase === ph).pop();
-    const a = last("사전"), b = last("사후");
-    const plays = store.plays.filter(p => p.pid === pid), spots = store.spots.filter(r => r.pid === pid);
-    const lines = [`[멈춤 연습장 결과] ${pid}`,
-      `사전 ${a ? a.score + "/" + a.n : "-"} → 사후 ${b ? b.score + "/" + b.n : "-"}`,
-      `연습: 안전 ${plays.filter(p => p.end === "safe").length} · 아슬아슬 ${plays.filter(p => p.end === "warn").length} · 피해 ${plays.filter(p => p.end === "danger").length}`,
-      "", "--- 분석용 (그대로 두세요) ---", ...csvLines(pid)];
-    return { a, b, text: lines.join("\n") };
-  }
-  // 시트로 보낼 한 줄: 자동 번호와 점수·고른 답만 (이름·전화번호 없음)
-  function sheetRow() {
-    const pid = store.flow.pid;
-    const last = ph => store.tests.filter(r => r.pid === pid && r.phase === ph).pop() || {};
-    const a = last("사전"), b = last("사후");
-    const plays = store.plays.filter(p => p.pid === pid), spots = store.spots.filter(r => r.pid === pid);
-    const cnt = e => plays.filter(p => p.end === e).length;
-    return {
-      v: 1, pid, n: a.n || QUIZ.length,
-      pre: a.score, post: b.score, preAns: a.ans || "", postAns: b.ans || "", preSec: a.sec, postSec: b.sec,
-      safe: cnt("safe"), warn: cnt("warn"), danger: cnt("danger"),
-      ends: plays.map(p => p.id + ":" + p.end).join(" "),
-      spots: spots.map(r => r.id + ":" + r.found + "/" + r.total + (r.gaveUp ? "(정답보기)" : "")).join(" "),
-      paths: plays.map(p => p.id + "=" + p.path).join(" | ")
-    };
-  }
-  // 시트로 전송. 응답 내용은 못 읽지만(no-cors) 인터넷이 끊긴 경우는 알 수 있어 다음에 다시 보냄
-  function sendResult() {
-    const f = store.flow;
-    if (!SHEET_URL || !f || f.stage !== "done" || f.sent) return Promise.resolve(!!(f && f.sent));
-    return fetch(SHEET_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" }, body: JSON.stringify(sheetRow()), keepalive: true })
-      .then(() => { f.sent = true; persist(); return true; }, () => false);
-  }
-  function flowResult() {
-    if (SHEET_URL) {
-      render(`
-        <div class="verdict safe"><span class="stamp">모두 끝났어요!</span><p>끝까지 해 주셔서 고맙습니다. 오늘 연습한 것 중 하나만 기억해 주세요.</p></div>
-        <div class="rule" aria-label="기억할 세 가지">
-          <div><b>멈춤</b>바로 하지 않기</div><div><b>끊기</b>전화·문자 끊기</div><div><b>확인</b>원래 번호로 전화</div>
-        </div>
-        <div class="card"><p id="sendmsg">결과를 선생님께 보내고 있어요…</p>
-          <button class="btn" id="resend" style="display:none">다시 보내기</button></div>
-        <button class="btn primary" data-go="home">처음 화면으로</button>
-      `);
-      const show = ok => {
-        const m = document.getElementById("sendmsg"), r = document.getElementById("resend");
-        if (!m) return;
-        m.textContent = ok ? "결과가 선생님께 전달됐어요. 이제 화면을 닫으셔도 돼요." : "인터넷이 연결되지 않아 아직 못 보냈어요. 와이파이나 데이터를 켜고 '다시 보내기'를 눌러 주세요.";
-        r.style.display = ok ? "none" : ""; // .btn 의 display:flex 가 hidden 을 덮어써서 직접 숨김
-      };
-      sendResult().then(show);
-      document.getElementById("resend").onclick = () => { document.getElementById("sendmsg").textContent = "다시 보내고 있어요…"; sendResult().then(show); };
-      return;
-    }
-    // 시트가 아직 없을 때: 카카오톡으로 직접 보내기
-    const { a, b, text } = flowReport();
-    render(`
-      <div class="verdict safe"><span class="stamp">모두 끝났어요!</span><p>끝까지 해 주셔서 고맙습니다.${a && b ? ` 처음엔 ${a.n}문제 중 ${a.score}문제, 연습 후엔 ${b.score}문제를 맞히셨어요.` : ""}</p></div>
-      <div class="card">
-        <p><b>마지막으로 결과를 보내 주세요</b></p>
-        <p>아래 버튼을 누르고 카카오톡을 고른 뒤, <b>이 연습을 알려 준 분</b>(하승준 학생이나 선생님)에게 보내 주세요.</p>
-        <button class="btn primary" id="share">결과 보내기</button>
-        <p class="msg" id="msg"></p>
-        <textarea id="resbox" hidden readonly style="width:100%;min-height:8em;font:inherit;font-size:0.75rem"></textarea>
-      </div>
-      <button class="link" data-go="home">처음 화면으로</button>
-    `);
-    document.getElementById("share").onclick = () => {
-      const box = document.getElementById("resbox"), msg = document.getElementById("msg");
-      const fallback = () => {
-        box.hidden = false; box.value = text; box.select();
-        try { navigator.clipboard.writeText(text).then(() => { msg.textContent = "결과가 복사됐어요. 카카오톡 하승준 대화방에 길게 눌러 붙여 넣어 주세요."; }, () => { msg.textContent = "아래 글을 길게 눌러 복사해서 카카오톡으로 보내 주세요."; }); }
-        catch (e) { msg.textContent = "아래 글을 길게 눌러 복사해서 카카오톡으로 보내 주세요."; }
-      };
-      // 휴대폰의 '공유하기' 창을 열어 카카오톡을 고를 수 있게 함 (지원 안 하면 복사로)
-      if (navigator.share) navigator.share({ text }).catch(e => { if (e && e.name !== "AbortError") fallback(); });
-      else fallback();
-    };
+    document.getElementById("read").onclick = () => speak(endLabel[n.end] + ". " + n.text + " 이것만 기억하세요. " + s.lesson.join(" "));
   }
 
   /* ---------- 화면: 가족 암호 ---------- */
@@ -781,34 +349,8 @@ th { color: var(--muted); font-weight: 700; }
           <li>그래도 이상하면 112(경찰)나 1332(금융감독원)에 물어봐요.</li>
         </ol>
       </div>
-      <div class="card">
-        <p><b>자녀분께: 부모님께 맞춤 연습 보내기</b></p>
-        <p class="lead" style="font-size:0.9rem">진짜 사기범도 가족 이름을 알고 연락해요. 아래를 채워 링크를 보내면, 부모님 휴대폰의 '자녀 사칭 문자'가 우리 가족 이름으로 나와요. 이름은 서버로 보내지 않아요.</p>
-        <label for="famp">부모님을 부르는 말</label>
-        <input type="text" id="famp" maxlength="10" placeholder="예: 엄마, 아빠, 어머니" value="${esc((store.fam && store.fam.p) || "엄마")}">
-        <label for="famc">자녀 이름이나 호칭</label>
-        <input type="text" id="famc" maxlength="10" placeholder="예: 민수, 막내" value="${esc((store.fam && store.fam.c) || "")}">
-        <button class="btn primary" id="famlink">맞춤 연습 링크 만들기</button>
-        <div id="famout" class="stack"></div>
-      </div>
       <button class="link" data-go="home">처음으로</button>
     `);
-    document.getElementById("famlink").onclick = () => {
-      const p = document.getElementById("famp").value.trim() || "엄마", c = document.getElementById("famc").value.trim();
-      const url = location.origin + location.pathname + "#fam=" + encodeURIComponent(JSON.stringify({ p, c }));
-      const text = `${p}, 사기 문자 대처를 미리 연습해 보세요. 눌러서 열면 바로 시작돼요.`;
-      document.getElementById("famout").innerHTML = `<div class="linkbox">${esc(url)}</div>
-        <div class="row"><button class="btn" id="famsend">${navigator.share ? "카톡 등으로 보내기" : "링크 복사"}</button><button class="btn" id="famtry">이 휴대폰에서 미리 보기</button></div>
-        <p class="msg" id="fammsg"></p>`;
-      document.getElementById("famsend").onclick = () => {
-        if (navigator.share) navigator.share({ title: "멈춤 연습장", text, url }).catch(() => {});
-        else {
-          const fail = () => { document.getElementById("fammsg").textContent = "위 주소를 길게 눌러 복사해 주세요."; };
-          try { navigator.clipboard.writeText(text + "\n" + url).then(() => { document.getElementById("fammsg").textContent = "복사됐어요. 부모님께 붙여 넣어 보내세요."; }, fail); } catch (e) { fail(); }
-        }
-      };
-      document.getElementById("famtry").onclick = () => { store.fam = { p, c }; persist(); play("child"); };
-    };
     const show = () => {
       document.getElementById("pwcard").innerHTML = store.pw ? `<div class="pw-card"><span class="small">돈 이야기가 나오면 먼저 물어보기</span><span class="q">${esc(store.pw)}</span><span class="small">이 화면을 가족과 함께 보며 답을 정해 두세요. 답은 적지 마세요.</span></div>` : "";
     };
@@ -822,10 +364,10 @@ th { color: var(--muted); font-weight: 700; }
     let phase = "사전";
     render(`
       <h2>사전·사후 문제</h2>
-      <p class="lead">연습 전에 한 번, 연습 후에 한 번 같은 문제 ${QUIZ.length}개를 풀어요. 정답은 알려 드리지 않아요.</p>
+      <p class="lead">연습 전에 한 번, 연습 후에 한 번 같은 문제 5개를 풀어요. 정답은 알려 드리지 않아요.</p>
       <div class="card">
         <label for="pid">참여자 이름 또는 번호</label>
-        <input type="text" id="pid" maxlength="20" placeholder="예: 참여자1" value="${esc(store.cur || "")}">
+        <input type="text" id="pid" maxlength="20" placeholder="예: 참여자1">
         <span style="font-weight:700">언제 푸나요?</span>
         <div class="seg"><button class="btn" data-ph="사전" aria-pressed="true">연습 전 (사전)</button><button class="btn" data-ph="사후" aria-pressed="false">연습 후 (사후)</button></div>
         <p class="msg" id="err" style="color:var(--danger)"></p>
@@ -840,13 +382,9 @@ th { color: var(--muted); font-weight: 700; }
     document.getElementById("begin").onclick = () => {
       const pid = document.getElementById("pid").value.trim();
       if (!pid) { document.getElementById("err").textContent = "참여자 이름이나 번호를 적어 주세요."; return; }
-      startTest(pid, phase);
+      test = { pid, phase, ans: [], t0: Date.now() };
+      testQ();
     };
-  }
-  function startTest(pid, phase) {
-    test = { pid, phase, ans: [], t0: Date.now() };
-    store.cur = pid; persist(); // 이후 연습·단서 찾기 기록에도 이 참여자 번호가 붙음
-    testQ();
   }
   function testQ() {
     const i = test.ans.length, q = QUIZ[i];
@@ -862,19 +400,8 @@ th { color: var(--muted); font-weight: 700; }
   }
   function testDone() {
     const score = test.ans.reduce((n, a, i) => n + (a === QUIZ[i].a ? 1 : 0), 0);
-    store.tests.push({ t: new Date().toISOString(), pid: test.pid, phase: test.phase, score, n: QUIZ.length, ans: test.ans.map(a => a + 1).join(""), sec: Math.round((Date.now() - test.t0) / 1000) });
+    store.tests.push({ t: new Date().toISOString(), pid: test.pid, phase: test.phase, score, ans: test.ans.map(a => a + 1).join(""), sec: Math.round((Date.now() - test.t0) / 1000) });
     persist();
-    if (store.flow && store.flow.pid === test.pid) {
-      const phase = test.phase; test = null;
-      if (phase === "사전") {
-        store.flow.stage = "practice"; persist();
-        return render(`
-          <div class="verdict safe"><span class="stamp">1단계 끝!</span><p>잘하셨어요. 이제 진짜 같은 사기 상황 ${SC.length}개를 연습해 볼게요. 화면에 나오는 대로 골라 보세요.</p></div>
-          <button class="btn primary" data-play="${SC[0].id}">2단계: 연습 시작하기</button>`);
-      }
-      store.flow.stage = "done"; persist();
-      return flowResult();
-    }
     render(`
       <div class="verdict safe"><span class="stamp">수고하셨어요!</span><p>${esc(test.pid)}님의 ${test.phase} 문제가 저장됐어요.</p></div>
       <p class="trail">진행자 확인용: ${QUIZ.length}문제 중 ${score}문제 정답</p>
@@ -885,30 +412,18 @@ th { color: var(--muted); font-weight: 700; }
   }
 
   /* ---------- 연구용: 기록 ---------- */
-  function csvLines(pid) {
-    const mine = r => !pid || r.pid === pid;
-    const lines = ["구분,시각,참여자,단계,점수,응답,소요초,시나리오,결과,선택경로"];
-    store.tests.filter(mine).forEach(r => lines.push(["문제", r.t, r.pid, r.phase, r.score, "'" + r.ans, r.sec, "", "", ""].join(",")));
-    store.spots.filter(mine).forEach(r => lines.push(["단서찾기", r.t, r.pid || "", "", r.found, r.gaveUp ? "정답보기" : "", r.sec, r.id, r.found + "/" + r.total, ""].join(",")));
-    store.plays.filter(mine).forEach(p => lines.push(["연습", p.t, p.pid || "", "", "", "", "", p.id, p.end, '"' + p.path.replace(/"/g, "'") + '"'].join(",")));
-    return lines;
-  }
   function records() {
     const people = {};
     store.tests.forEach(r => { (people[r.pid] = people[r.pid] || {})[r.phase] = r; });
     const rows = Object.keys(people).map(p => {
       const a = people[p]["사전"], b = people[p]["사후"];
       const d = a && b ? b.score - a.score : null;
-      return `<tr><td>${esc(p)}</td><td>${a ? a.score + "/" + (a.n || 5) : "-"}</td><td>${b ? b.score + "/" + (b.n || 5) : "-"}</td><td>${d === null ? "-" : (d > 0 ? "+" : "") + d}</td></tr>`;
+      return `<tr><td>${esc(p)}</td><td>${a ? a.score + "/5" : "-"}</td><td>${b ? b.score + "/5" : "-"}</td><td>${d === null ? "-" : (d > 0 ? "+" : "") + d}</td></tr>`;
     }).join("");
     const pre = store.tests.filter(r => r.phase === "사전"), post = store.tests.filter(r => r.phase === "사후");
-    const avg = arr => arr.length ? (arr.reduce((n, r) => n + r.score / (r.n || 5), 0) / arr.length * 100).toFixed(0) + "%" : "-"; // 예전 기록(5문항)도 맞게 계산
+    const avg = arr => arr.length ? (arr.reduce((n, r) => n + r.score, 0) / arr.length / 5 * 100).toFixed(0) + "%" : "-";
     const ends = { safe: 0, warn: 0, danger: 0 };
     store.plays.forEach(p => ends[p.end]++);
-    const spotLine = Object.keys(SPOT).map(id => {
-      const rs = store.spots.filter(r => r.id === id);
-      return `${esc(SC.find(s => s.id === id).title)}: ${rs.length ? "평균 " + (rs.reduce((n, r) => n + r.found, 0) / rs.length).toFixed(1) + " / " + rs[0].total + "개 (" + rs.length + "회)" : "-"}`;
-    }).join("<br>");
     render(`
       <h2>저장된 기록</h2>
       <p class="lead">이 기록은 이 휴대폰(브라우저) 안에만 저장돼요. 테스트가 끝나면 아래 '기록 복사'로 옮겨 두세요.</p>
@@ -917,7 +432,6 @@ th { color: var(--muted); font-weight: 700; }
         <div class="table-box"><table><thead><tr><th>참여자</th><th>사전</th><th>사후</th><th>변화</th></tr></thead>
         <tbody>${rows || '<tr><td colspan="4">아직 기록이 없어요. 사전 문제를 먼저 풀어 주세요.</td></tr>'}</tbody></table></div>
         <p><b>연습 결과</b> 안전 ${ends.safe}회 · 아슬아슬 ${ends.warn}회 · 피해 ${ends.danger}회 (총 ${store.plays.length}회)</p>
-        <p><b>수상한 점 찾기</b><br>${spotLine}</p>
       </div>
       <div class="row"><button class="btn" id="copy">기록 복사 (CSV)</button><button class="btn" id="wipe">기록 모두 지우기</button></div>
       <p class="msg" id="msg"></p>
@@ -926,7 +440,10 @@ th { color: var(--muted); font-weight: 700; }
       <button class="link" data-go="home">처음으로</button>
     `);
     document.getElementById("copy").onclick = () => {
-      const csv = csvLines().join("\n");
+      const lines = ["구분,시각,참여자,단계,점수,응답,소요초,시나리오,결과,선택경로"];
+      store.tests.forEach(r => lines.push(["문제", r.t, r.pid, r.phase, r.score, "'" + r.ans, r.sec, "", "", ""].join(",")));
+      store.plays.forEach(p => lines.push(["연습", p.t, "", "", "", "", "", p.id, p.end, '"' + p.path.replace(/"/g, "'") + '"'].join(",")));
+      const csv = lines.join("\n");
       const box = document.getElementById("csvbox");
       const fallback = () => { box.hidden = false; box.value = csv; box.select(); document.getElementById("msg").textContent = "아래 글을 길게 눌러 복사해 주세요."; };
       try {
@@ -935,7 +452,7 @@ th { color: var(--muted); font-weight: 700; }
     };
     document.getElementById("wipe").onclick = () => {
       document.getElementById("confirm").innerHTML = `<div class="confirm"><p>정말 모든 기록을 지울까요? 되돌릴 수 없어요.</p><div class="row"><button class="btn" id="yes">지우기</button><button class="btn" id="no">취소</button></div></div>`;
-      document.getElementById("yes").onclick = () => { store.tests = []; store.plays = []; store.spots = []; store.played = {}; persist(); records(); };
+      document.getElementById("yes").onclick = () => { store.tests = []; store.plays = []; store.played = {}; persist(); records(); };
       document.getElementById("no").onclick = () => { document.getElementById("confirm").innerHTML = ""; };
     };
   }
@@ -945,25 +462,12 @@ th { color: var(--muted); font-weight: 700; }
   app.addEventListener("click", e => {
     const b = e.target.closest("button");
     if (!b) return;
-    if (b.id === "famoff") { store.fam = null; persist(); home(); }
-    else if (b.id === "flowgo") flowGo();
-    else if (b.id === "flowstart") { store.flow.stage = "pre"; persist(); startTest(store.flow.pid, "사전"); }
-    else if (b.id === "flowpost") { store.flow.stage = "post"; persist(); startTest(store.flow.pid, "사후"); }
-    else if (b.id === "flowresult") flowResult();
-    else if (b.id === "flowjoin") { store.flow = { pid: newPid(), stage: "intro" }; store.cur = store.flow.pid; persist(); flowIntro(); }
-    else if (b.id === "flownew") { store.flow = { pid: newPid(), stage: "intro" }; store.cur = store.flow.pid; persist(); flowIntro(); }
-    else if (b.id === "staffoff") { store.staff = false; persist(); home(); }
-    else if (b.id === "curoff") { store.cur = ""; persist(); home(); }
-    else if (b.id === "size") {
+    if (b.id === "size") {
       store.big = !store.big; persist();
       document.documentElement.classList.toggle("big", store.big);
       b.textContent = store.big ? "글씨 보통" : "글씨 크게"; b.setAttribute("aria-pressed", store.big);
     } else if (b.dataset.go) views[b.dataset.go]();
     else if (b.dataset.play) play(b.dataset.play);
-    else if (b.dataset.spot) spotPlay(b.dataset.spot);
-    else if (b.dataset.clue || b.dataset.decoy) spotTap(b);
-    else if (b.id === "giveup" && sp && !sp.done) spotFinish(true);
-    else if ((b.dataset.pick || b.dataset.ans !== undefined) && Date.now() - shownAt < 500) return;
     else if (b.dataset.pick) { cur.path.push(b.dataset.label); step(b.dataset.pick); }
     else if (b.dataset.ans !== undefined && test) {
       test.ans.push(+b.dataset.ans);
@@ -971,7 +475,6 @@ th { color: var(--muted); font-weight: 700; }
     }
   });
 
-  openFlow ? flowGo() : home();
-  sendResult().then(ok => { if (ok && !openFlow && app.querySelector(".fam-banner")) home(); }); // 지난번에 못 보낸 결과가 있으면 조용히 다시 보냄
+  home();
 })();
 </script>
